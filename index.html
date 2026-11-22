@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEPT Intermediate Reading Studio | 全民英檢中級閱讀能力測驗</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'Cambria', 'serif'],
+          },
+          colors: {
+            paper: '#FAF9F6',
+            navy: {
+              DEFAULT: '#1E3A8A',
+              light: '#2B4F9E',
+              dark: '#172554',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+      background-color: #FAF9F6;
+      color: #0F172A;
+    }
+    .passage-serif {
+      font-family: 'Merriweather', Georgia, serif;
+      line-height: 1.95;
+      letter-spacing: 0.01em;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1F5F9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    /* 3D Flashcard Flip */
+    .flashcard-scene {
+      perspective: 1200px;
+    }
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      min-height: 310px;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .flashcard-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 1.5rem;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+    @keyframes pulseUrgent {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+    .timer-urgent {
+      animation: pulseUrgent 1.3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#1E3A8A]/15 selection:text-[#1E3A8A]">
+
+  <!-- Top Navigation Header -->
+  <header id="app-header" class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-2xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <button type="button" data-action="go-home" class="flex items-center gap-3 text-left group focus:outline-none cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-[#1E3A8A] text-white flex items-center justify-center shadow-xs group-hover:bg-[#2B4F9E] transition-colors">
+          <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-[#1E3A8A] text-base sm:text-lg tracking-tight">GEPT Intermediate</span>
+            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#1E3A8A]/10 text-[#1E3A8A]">CEFR B1</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">全民英檢中級閱讀能力測驗工作室</p>
+        </div>
+      </button>
+
+      <nav id="main-nav" class="flex items-center gap-1 sm:gap-2">
+        <button type="button" data-action="navigate" data-route="dashboard" data-nav="dashboard" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer">
+          測驗總覽
+        </button>
+        <button type="button" data-action="navigate" data-route="ai-generator" data-nav="ai-generator" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-4 h-4 hidden sm:block text-[#D97706] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>AI 出題</span>
+        </button>
+        <button type="button" data-action="navigate" data-route="vocab" data-nav="vocab" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
+          <span>單字卡</span>
+          <span id="nav-vocab-count" class="px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 pointer-events-none">0</span>
+        </button>
+        <button type="button" data-action="navigate" data-route="mistakes" data-nav="mistakes" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
+          <span>錯題本</span>
+          <span id="nav-mistake-count" class="px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 pointer-events-none">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main id="app-root" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Dynamic Content -->
+  </main>
+
+  <!-- Custom Confirmation / Info Modal (Zero native alert/confirm) -->
+  <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-start gap-3.5">
+        <div id="modal-icon" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#1E3A8A]/10 text-[#1E3A8A]">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="flex-1">
+          <h3 id="modal-title" class="text-lg font-bold text-slate-900">確認操作</h3>
+          <div id="modal-body" class="mt-1.5 text-sm text-slate-600 leading-relaxed"></div>
+        </div>
+      </div>
+      <div id="modal-actions" class="mt-6 flex items-center justify-end gap-2.5"></div>
+    </div>
+  </div>
+
+  <!-- Toast Stack -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white mt-auto py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <p>GEPT Intermediate Reading Practice Studio • 全民英檢中級閱讀模擬與 AI 學習系統</p>
+      <p>Official Format: 45 Minutes • 40 Questions • Passing Benchmark: 72 / 120</p>
+    </div>
+  </footer>
+
+  <script>
+    'use strict';
+
+    /* ============================================================================
+       1. SAFE STORAGE WRAPPER (localStorage + In-Memory Fallback for Sandboxes)
+       ============================================================================ */
+    const SafeStorage = (() => {
+      const mem = {};
+      return {
+        getItem(key) {
+          try {
+            const v = window.localStorage.getItem(key);
+            return v !== null ? v : (Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null);
+          } catch (e) {
+            return Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null;
+          }
+        },
+        setItem(key, val) {
+          const s = String(val);
+          mem[key] = s;
+          try {
+            window.localStorage.setItem(key, s);
+          } catch (e) {
+            // Gracefully fall back to in-memory storage in sandboxed iframes
+          }
+        }
+      };
+    })();
+
+    const HAS_SPEECH = typeof window !== 'undefined' && 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance !== 'undefined';
+
+    /* ============================================================================
+       2. VERIFIED 40-QUESTION GEPT INTERMEDIATE (B1) BANK
+          Every single question verified with:
+          { id: 1..40, part: 1|2|3, passageId, blankNumber, stem, options[4], correct: 0..3, explanation, vocab[] }
+       ============================================================================ */
+    const OFFICIAL_PASSAGES = [
+      // --- PART 2: CLOZE PASSAGES (2 Passages, 5 Blanks Each) ---
+      {
+        id: 'p2_vertical_farming',
+        part: 2,
+        title: 'Vertical Farming: Growing Crops in High-Rise Cities',
+        subtitle: 'Part 2 Cloze Passage 1 • 都市垂直農業 (Questions 16–20)',
+        content: `As global urban populations continue to expand, traditional farmland is becoming increasingly scarce. To ensure a reliable supply of fresh produce without clearing more forests, agricultural engineers are turning to indoor vertical farming. In these multi-story facilities, leafy greens, herbs, and strawberries are grown in stacked trays under energy-efficient LED lights rather than natural sunlight.\n\nUnlike conventional farms that depend heavily on unpredictable weather, vertical farms operate in climate-controlled environments where temperature, humidity, and carbon dioxide levels are carefully [[16]]. Using hydroponic or aeroponic systems, plant roots receive nutrient-rich mist directly, which [[17]] water consumption by up to ninety percent compared to outdoor agriculture. [[18]], because crops are cultivated inside sealed buildings, farmers rarely need to apply chemical pesticides.\n\n[[19]] these impressive environmental advantages, vertical farming still faces significant economic hurdles. Constructing automated towers and powering artificial lighting around the clock require substantial upfront investment. However, as renewable energy becomes cheaper and automation technology improves, experts believe vertical farms will play an increasingly [[20]] role in feeding major metropolitan areas.`
+      },
+      {
+        id: 'p2_circadian_rhythms',
+        part: 2,
+        title: 'Circadian Rhythms and the Challenge of Shift Work',
+        subtitle: 'Part 2 Cloze Passage 2 • 生理時鐘與輪班工作 (Questions 21–25)',
+        content: `Every human being possesses an internal biological clock known as the circadian rhythm, which regulates sleep-wake cycles, hormone release, and body temperature over a roughly twenty-four-hour period. This internal timing system is primarily synchronized by natural daylight entering the eyes, signaling the brain when to feel alert and when to [[21]] for rest.\n\nFor millions of nurses, factory technicians, and emergency responders who work overnight shifts, this natural rhythm is frequently disrupted. Staying awake under bright artificial lights at night and attempting to sleep during the sunny daytime forces the body to operate [[22]] its biological programming. Over time, chronic circadian misalignment can weaken immune function and increase the risk of metabolic disorders.\n\nTo minimize these health impacts, sleep specialists recommend that shift workers adopt consistent routines. Wearing dark sunglasses during the morning commute home helps prevent sunlight [[23]] triggering daytime alertness hormones. [[24]], keeping the bedroom completely dark and cool supports deeper daytime recovery sleep. Employers can also help by designing rotating schedules that move forward chronologically, giving workers adequate time to [[25]] between shift changes.`
+      },
+
+      // --- PART 3: READING COMPREHENSION PASSAGES (5 Passages, 3 Questions Each) ---
+      {
+        id: 'p3_makerspace',
+        part: 3,
+        title: 'Riverside Community Maker-Space: Weekend Workshop Schedule',
+        subtitle: 'Part 3 Passage A • 社區創客工坊活動公告 (Questions 26–28)',
+        content: `RIVERSIDE COMMUNITY MAKER-SPACE — AUTUMN OPEN HOUSE & WORKSHOPS\nDate: Saturday, October 24 | Hours: 9:30 AM – 5:00 PM\nLocation: 88 Harbor Street, Building C (2nd Floor)\n\nCurious about 3D printing, woodworking, or basic electronics? Visit Riverside Community Maker-Space this Saturday to tour our shared studio, meet local instructors, and try hands-on projects!\n\nFEATURED WORKSHOPS:\n• 10:00 AM – 11:30 AM | Intro to Laser-Cut Wooden Coasters (Lab 1)\n  Design a personalized geometric coaster using vector software and watch our laser cutter engrave it in minutes. Materials fee: NT$150. Limited to 12 seats; advance sign-up at www.riversidemakers.org is required.\n• 1:00 PM – 2:30 PM | Smartphone Stand Woodworking Clinic (Woodshop)\n  Learn safe handsaw and sanding techniques to craft a solid ash-wood phone holder. Free admission; walk-in registration opens 30 minutes prior to the session.\n• 3:00 PM – 4:30 PM | Soldering & LED Desk Light Basics (Electronics Bench)\n  Assemble a rechargeable USB reading lamp while learning fundamental circuit safety. Materials fee: NT$250. Advance online sign-up required.\n\nSTUDIO SAFETY & MEMBERSHIP NOTES:\nFor your safety, closed-toe shoes and tied-back long hair are mandatory in all workshop labs; visitors wearing sandals will not be permitted near machinery. Attendees who sign up for an annual community membership during the Open House will receive a 20% discount on their first three months of studio access.`
+      },
+      {
+        id: 'p3_logistics_email',
+        part: 3,
+        title: 'Logistics Update: Shipment Delay for Order #LG-7042',
+        subtitle: 'Part 3 Passage B • 商業物流延誤通知信件 (Questions 29–31)',
+        content: `From: Marcus Wu, Logistics Coordinator <dispatch@apexofficesupply.com.tw>\nTo: Hannah Lin, Procurement Manager <h.lin@brightstartech.tw>\nDate: November 12\nSubject: Important Shipping Update Regarding Purchase Order #LG-7042\n\nDear Ms. Lin,\n\nThank you for placing Purchase Order #LG-7042 with Apex Office Supply on November 5 for twelve Ergonomic Mesh Task Chairs and four Acoustic Meeting Pods.\n\nWe are writing to inform you of a brief logistical delay affecting part of your shipment. While all twelve Ergonomic Mesh Task Chairs have already cleared inspection at our Taoyuan warehouse and are ready for immediate dispatch, the cargo vessel carrying our latest shipment of Acoustic Meeting Pods was rerouted due to severe typhoon conditions in the South China Sea. As a result, the pods are now scheduled to dock at Kaohsiung Port on November 19 and arrive at our distribution hub on November 21.\n\nTo avoid delaying your entire office setup, we propose the following two delivery arrangements at no additional shipping cost:\n• Option A (Split Delivery): We deliver the twelve task chairs this Friday, November 14, and deliver the four acoustic pods separately on Monday, November 23.\n• Option B (Single Consolidated Delivery): We hold the task chairs in our warehouse and deliver all items together in one truckload on November 23.\n\nPlease confirm your preferred arrangement by 5:00 PM tomorrow, November 13. If we do not receive a response by then, we will automatically execute Option A so your staff can begin using the chairs right away. Additionally, we have applied a 5% credit toward your next corporate invoice as a gesture of goodwill.\n\nSincerely,\nMarcus Wu\nLogistics Coordinator, Apex Office Supply Co.`
+      },
+      {
+        id: 'p3_microbreaks',
+        part: 3,
+        title: 'Why Short "Micro-Breaks" Outperform Marathon Work Sessions',
+        subtitle: 'Part 3 Passage C • 職場專注力與微休息研究 (Questions 32–34)',
+        content: `In many competitive workplaces, sitting at a desk for hours without stepping away is still mistaken for high productivity. However, cognitive psychologists warn that pushing through long stretches of uninterrupted screen work actually erodes both mental accuracy and physical well-being. Research demonstrates that sustained concentration steadily depletes the brain's attentional reserves, resulting in digital eye strain, tense neck muscles, and a noticeable rise in careless mistakes.\n\nTo identify healthier work rhythms, occupational health researchers recently reviewed findings from more than twenty workplace experiments examining "micro-breaks"—brief, intentional pauses lasting between thirty seconds and five minutes. Across industries, employees who took short, regular breaks reported lower exhaustion and higher task engagement than colleagues who worked continuously until midday.\n\nCrucially, the researchers emphasized that the quality of a break depends on how those few minutes are spent. Standing up to stretch, looking out a window at distant greenery, or walking to fetch a glass of water allowed the brain's focus networks to genuinely recharge. Conversely, checking social media feeds on a smartphone during a pause failed to restore mental energy, because scrolling through rapid streams of text and images forced the brain to continue processing heavy visual stimuli.`
+      },
+      {
+        id: 'p3_transient_electronics',
+        part: 3,
+        title: 'Water-Soluble Transient Electronics: Devices That Vanish Safely',
+        subtitle: 'Part 3 Passage D • 水溶性瞬態電子科技 (Questions 35–37)',
+        content: `Every year, tens of millions of discarded smartphones, sensors, and circuit boards accumulate in landfills, creating an urgent environmental problem known as electronic waste. To tackle this challenge, materials scientists are developing a groundbreaking class of hardware called "transient electronics." Unlike conventional gadgets engineered to endure for years, transient devices are designed to function reliably for a set period and then dissolve harmlessly when exposed to water or bodily fluids.\n\nOne of the most exciting applications of this innovation lies in post-surgical medicine. Currently, when surgeons implant temporary electronic sensors inside a patient to track tissue healing or internal pressure after an operation, a second surgical procedure is often necessary to extract the device once recovery is complete. By fabricating ultra-thin circuits from magnesium, silicon nanomembranes, and natural silk proteins, engineers have built wireless medical monitors that operate accurately for several weeks before safely dissolving into benign substances absorbed or excreted by the body.\n\nBeyond hospital wards, environmental researchers are testing water-soluble sensors across agricultural fields and watersheds. Scattered over farmland, these tiny biodegradable monitors measure soil moisture and fertilizer runoff throughout a single growing season, then dissolve completely after the first heavy autumn rains without leaving toxic residue behind.`
+      },
+      {
+        id: 'p3_seagrass',
+        part: 3,
+        title: 'Seagrass Meadows: The Ocean’s Hidden Blue Carbon Champions',
+        subtitle: 'Part 3 Passage E • 海草床與海洋藍碳生態系 (Questions 38–40)',
+        content: `When people picture ecosystems that protect Earth from climate change, dense tropical rainforests usually come to mind first. Yet beneath shallow coastal waters lies an equally powerful ally: underwater seagrass meadows. Alongside mangrove forests and tidal salt marshes, seagrass beds make up what marine ecologists call "blue carbon" ecosystems—coastal habitats capable of capturing and storing carbon dioxide up to thirty-five times faster per unit area than terrestrial forests.\n\nThe secret behind seagrass's remarkable storage capacity lies beneath the seabed. Whereas land trees store most of their carbon in above-ground trunks and branches that release greenhouse gases if burned or logged, seagrasses trap organic carbon deep within oxygen-poor underwater sediments. Once sealed inside these marine soils, captured carbon can remain locked away safely for thousands of years.\n\nIn addition to moderating global climate, lush seagrass beds cushion shorelines against destructive storm waves and serve as vital nurseries for juvenile fish, seahorses, and endangered green sea turtles. Unfortunately, coastal dredging, agricultural runoff, and careless boat anchoring have destroyed nearly one-third of global seagrass coverage over the past century. Today, marine conservation organizations across Asia and worldwide are racing to restore and legally protect these vital underwater meadows.`
+      }
+    ];
+
+    const OFFICIAL_QUESTIONS = [
+      // ==================== PART 1: VOCABULARY & STRUCTURE (Q1 - Q15) ====================
+      {
+        id: 1,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'The city council has decided to ______ a new public bike-sharing initiative next spring to ease downtown traffic.',
+        options: ['launch', 'rescue', 'pretend', 'whisper'],
+        correct: 0,
+        explanation: 'EN: "Launch" means to start or introduce a new plan or program ("launch an initiative").\n繁中：正確答案為 (A) launch「啟動、推行」。句意：「市議會決定明年春天推出一項新的公共自行車共享計畫以緩解市中心交通。」(B) rescue 拯救；(C) pretend 假裝；(D) whisper 低語。',
+        vocab: [
+          { word: 'launch', pos: 'v.', zh: '啟動、發起、推出', example: 'The company plans to launch its new electric vehicle in October.' },
+          { word: 'initiative', pos: 'n.', zh: '新方案、倡議、主動性', example: 'Employees praised the green recycling initiative.' }
+        ]
+      },
+      {
+        id: 2,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: '______ in the heart of the historic harbor district, the boutique hotel attracts thousands of international visitors annually.',
+        options: ['Locating', 'Located', 'To locate', 'Having located'],
+        correct: 1,
+        explanation: 'EN: Past participle "Located" starts a participial phrase derived from the passive voice ("Being located in...").\n繁中：正確答案為 (B) Located。主詞 the boutique hotel 與動詞 locate（使坐落於）為被動關係（be located in...），省略主詞與 be 動詞後保留過去分詞 Located 形成分詞構句。',
+        vocab: [
+          { word: 'boutique hotel', pos: 'n. phr.', zh: '精品旅館', example: 'They booked a charming boutique hotel near the old port.' },
+          { word: 'annually', pos: 'adv.', zh: '每年地、一年一次地', example: 'The international film festival is held annually in November.' }
+        ]
+      },
+      {
+        id: 3,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Because the meteorological bureau issued ______ rainfall warnings for the weekend, the outdoor marathon was postponed.',
+        options: ['fragile', 'severe', 'polite', 'vacant'],
+        correct: 1,
+        explanation: 'EN: "Severe" describes extreme or harsh weather conditions ("severe rainfall warnings").\n繁中：正確答案為 (B) severe「劇烈的、嚴重的」。句意：「由於氣象局發布週末強降雨警報，戶外馬拉松因而延期。」(A) fragile 易碎的；(C) polite 有禮貌的；(D) vacant 空缺的。',
+        vocab: [
+          { word: 'severe', pos: 'adj.', zh: '劇烈的、嚴重的', example: 'Severe storms forced the airport to cancel several flights.' },
+          { word: 'postpone', pos: 'v.', zh: '延期、推遲', example: 'The outdoor concert was postponed due to heavy rain.' }
+        ]
+      },
+      {
+        id: 4,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'The clinical nutritionist strongly recommended that patients ______ their daily intake of ultra-processed sugar.',
+        options: ['reducing', 'reduced', 'reduce', 'to reduce'],
+        correct: 2,
+        explanation: 'EN: Verbs of recommendation ("recommend that...") require the base subjunctive form ("(should) reduce").\n繁中：正確答案為 (C) reduce。主要子句動詞為表「建議」的 recommended，其後 that 名詞子句須使用假設語氣，動詞用「(should) + 原形動詞」，故選 reduce。',
+        vocab: [
+          { word: 'intake', pos: 'n.', zh: '攝取量', example: 'Doctors advise limiting your daily sodium intake.' },
+          { word: 'nutritionist', pos: 'n.', zh: '營養師', example: 'A nutritionist helped design a balanced meal plan for athletes.' }
+        ]
+      },
+      {
+        id: 5,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Due to unexpected supply-chain disruptions, the engineering team had to ______ the product release until November.',
+        options: ['put off', 'turn into', 'look after', 'break down'],
+        correct: 0,
+        explanation: 'EN: "Put off" is a phrasal verb meaning to delay or postpone an event.\n繁中：正確答案為 (A) put off「延後、推遲」（等同於 postpone / delay）。(B) turn into 變成；(C) look after 照顧；(D) break down 故障、分解。',
+        vocab: [
+          { word: 'put off', pos: 'phr. v.', zh: '延後、推遲', example: 'Never put off until tomorrow what you can finish today.' },
+          { word: 'disruption', pos: 'n.', zh: '中斷、擾亂', example: 'Heavy snow caused major disruptions to rail travel.' }
+        ]
+      },
+      {
+        id: 6,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'The auditorium ______ the annual shareholders’ conference will be held is currently undergoing acoustic renovation.',
+        options: ['which', 'in where', 'in which', 'that'],
+        correct: 2,
+        explanation: 'EN: "In which" functions like "where" to introduce a relative clause modifying a location ("hold the conference in the auditorium").\n繁中：正確答案為 (C) in which。先行詞為地點 The auditorium，會議是在禮堂「裡面」舉行，故須用「介系詞 + 關係代名詞」in which（等同於 where），不可寫成 in where。',
+        vocab: [
+          { word: 'renovation', pos: 'n.', zh: '翻新、整修', example: 'The museum is closed for renovation until next spring.' }
+        ]
+      },
+      {
+        id: 7,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Applicants for the bilingual museum docent position must demonstrate fluency in English and a strong ______ of local history.',
+        options: ['symptom', 'command', 'obstacle', 'receipt'],
+        correct: 1,
+        explanation: 'EN: "A strong command of" is a standard collocation meaning thorough knowledge or mastery of a subject.\n繁中：正確答案為 (B) command「掌握、精通、造詣」。a strong command of... 為固定搭配，意為「對……有深厚的掌握／了解」。(A) symptom 症狀；(C) obstacle 障礙；(D) receipt 收據。',
+        vocab: [
+          { word: 'command', pos: 'n.', zh: '精通、掌握；命令', example: 'She has an impressive command of three foreign languages.' },
+          { word: 'demonstrate', pos: 'v.', zh: '展現、證明、示範', example: 'Candidates must demonstrate strong analytical skills.' }
+        ]
+      },
+      {
+        id: 8,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: '______ the rising cost of organic flour and butter, the artisan bakery refused to compromise on ingredient quality.',
+        options: ['Even though', 'In spite of', 'Whereas', 'Provided that'],
+        correct: 1,
+        explanation: 'EN: "In spite of" is a prepositional phrase followed by a noun phrase ("the rising cost..."), unlike conjunctions which require a full clause.\n繁中：正確答案為 (B) In spite of「儘管」。空格後方接的是名詞片語 the rising cost of organic flour and butter，因此必須填入介系詞片語 In spite of（等同於 Despite）。',
+        vocab: [
+          { word: 'compromise', pos: 'v./n.', zh: '妥協、損害品質；折衷方案', example: 'We never compromise on food safety standards.' }
+        ]
+      },
+      {
+        id: 9,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Sales of electric bicycles have grown ______ over the past five years as more urban commuters seek low-carbon transportation.',
+        options: ['steadily', 'barely', 'narrowly', 'vaguely'],
+        correct: 0,
+        explanation: 'EN: "Steadily" means at a continuous, consistent pace, fitting the upward sales trend.\n繁中：正確答案為 (A) steadily「穩定地、持續地」。句意：「隨著越來越多都市通勤族尋求低碳交通工具，電動自行車銷量在過去五年間穩定成長。」(B) barely 幾乎不；(C) narrowly 勉強地；(D) vaguely 模糊地。',
+        vocab: [
+          { word: 'steadily', pos: 'adv.', zh: '穩定地、持續地', example: 'Renewable energy capacity has increased steadily.' },
+          { word: 'commuter', pos: 'n.', zh: '通勤族', example: 'Morning trains are packed with suburban commuters.' }
+        ]
+      },
+      {
+        id: 10,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: '______ earlier for the international terminal, we would not have missed our connecting flight to Osaka.',
+        options: ['If we left', 'Had we left', 'Should we leave', 'Were we leaving'],
+        correct: 1,
+        explanation: 'EN: Inverted third conditional ("Had we left..." = "If we had left...") expresses a hypothetical past situation.\n繁中：正確答案為 (B) Had we left。由主要子句 would not have missed 可知此為「與過去事實相反」的假設語氣，原句為 If we had left earlier...，省略 If 後將助動詞 Had 移至主詞 we 之前形成倒裝。',
+        vocab: [
+          { word: 'connecting flight', pos: 'n. phr.', zh: '轉機航班', example: 'We had a ninety-minute layover before our connecting flight.' }
+        ]
+      },
+      {
+        id: 11,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Regular aerobic exercise not only strengthens cardiovascular health but also helps ______ tension after a demanding workday.',
+        options: ['relieve', 'imitate', 'occupy', 'betray'],
+        correct: 0,
+        explanation: 'EN: "Relieve tension" is a common collocation meaning to reduce stress or tightness.\n繁中：正確答案為 (A) relieve「舒緩、減輕」。核心搭配詞：relieve tension / stress / pain（舒緩緊繃／壓力／疼痛）。(B) imitate 模仿；(C) occupy 佔據；(D) betray 背叛。',
+        vocab: [
+          { word: 'relieve', pos: 'v.', zh: '減輕、舒緩', example: 'Deep breathing exercises can quickly relieve anxiety.' },
+          { word: 'demanding', pos: 'adj.', zh: '費力的、要求高的', example: 'Emergency medicine is a rewarding yet demanding field.' }
+        ]
+      },
+      {
+        id: 12,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'The step-by-step diagrams in the manual make ______ much easier for first-time buyers to assemble the standing desk.',
+        options: ['that', 'this', 'it', 'what'],
+        correct: 2,
+        explanation: 'EN: "It" serves as the formal preparatory object anticipating the infinitive phrase ("to assemble the standing desk").\n繁中：正確答案為 (C) it。本句使用虛受詞結構「make + it（虛受詞）+ 形容詞（easier）+ for sb + to V（真受詞）」，英語中只有 it 可作為虛受詞代替後方的不定詞片語。',
+        vocab: [
+          { word: 'assemble', pos: 'v.', zh: '組裝、集合', example: 'It took less than thirty minutes to assemble the cabinet.' }
+        ]
+      },
+      {
+        id: 13,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'Before signing a commercial lease, tenants should review every clause carefully to ensure the terms are ______ and equitable.',
+        options: ['transparent', 'suspicious', 'reluctant', 'exhausted'],
+        correct: 0,
+        explanation: 'EN: "Transparent" means clear, open, and easy to understand without hidden conditions.\n繁中：正確答案為 (A) transparent「透明的、公開明確的」。句意：「在簽署商業租約前，承租人應仔細審閱每項條款，以確保條件公開透明且公平。」(B) suspicious 可疑的；(C) reluctant 勉強的；(D) exhausted 精疲力竭的。',
+        vocab: [
+          { word: 'transparent', pos: 'adj.', zh: '透明的、公開明確的', example: 'Customers appreciate transparent pricing with no hidden fees.' },
+          { word: 'tenant', pos: 'n.', zh: '房客、承租人', example: 'Tenants must give thirty days’ notice before vacating.' }
+        ]
+      },
+      {
+        id: 14,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'By the time the harbor bridge extension opens next autumn, engineering crews ______ on the structure for nearly six years.',
+        options: ['will work', 'have worked', 'will have been working', 'were working'],
+        correct: 2,
+        explanation: 'EN: Future perfect continuous ("will have been working") emphasizes an ongoing duration ("for nearly six years") up to a future point ("By the time... opens").\n繁中：正確答案為 (C) will have been working。時間副詞子句 By the time... opens next autumn 以現在簡單式代替未來時間點，搭配持續時間 for nearly six years，主句須用未來完成進行式 will have been V-ing。',
+        vocab: [
+          { word: 'extension', pos: 'n.', zh: '延伸線、擴建、延長', example: 'The metro extension will link the science park to downtown.' }
+        ]
+      },
+      {
+        id: 15,
+        part: 1,
+        passageId: null,
+        blankNumber: null,
+        stem: 'The research institute conducted an island-wide survey ______ identifying the shifting habits of remote workers.',
+        options: ['on behalf of', 'with a view to', 'in contrast to', 'at the mercy of'],
+        correct: 1,
+        explanation: 'EN: "With a view to" is a prepositional phrase meaning "with the aim/purpose of" and takes a gerund ("identifying").\n繁中：正確答案為 (B) with a view to「著眼於、為了」（其中 to 為介系詞，後接動名詞 identifying）。(A) on behalf of 代表；(C) in contrast to 與……形成對比；(D) at the mercy of 任憑……擺布。',
+        vocab: [
+          { word: 'with a view to', pos: 'prep. phr.', zh: '為了、著眼於（後接 V-ing）', example: 'They renovated the warehouse with a view to opening a gallery.' }
+        ]
+      },
+
+      // ==================== PART 2: CLOZE PASSAGES (Q16 - Q25) ====================
+      // --- Passage 1: Urban Vertical Farming (Q16 - Q20) ---
+      {
+        id: 16,
+        part: 2,
+        passageId: 'p2_vertical_farming',
+        blankNumber: 16,
+        stem: 'Blank [16]: "...where temperature, humidity, and carbon dioxide levels are carefully ______."',
+        options: ['monitored', 'abandoned', 'imitated', 'postponed'],
+        correct: 0,
+        explanation: 'EN: "Monitored" means closely observed and regulated inside climate-controlled facilities.\n繁中：正確答案為 (A) monitored「監測、調控」。上下文說明垂直農場在氣候受控的環境中運作，溫度、濕度與二氧化碳濃度都受到嚴密監測。(B) abandoned 遺棄；(C) imitated 模仿；(D) postponed 延期。',
+        vocab: [
+          { word: 'scarce', pos: 'adj.', zh: '缺乏的、稀少的', example: 'Fresh water is becoming scarce in drought-prone regions.' },
+          { word: 'monitor', pos: 'v.', zh: '監測、追蹤', example: 'Sensors continuously monitor air quality inside the greenhouse.' }
+        ]
+      },
+      {
+        id: 17,
+        part: 2,
+        passageId: 'p2_vertical_farming',
+        blankNumber: 17,
+        stem: 'Blank [17]: "...which ______ water consumption by up to ninety percent compared to outdoor agriculture."',
+        options: ['reduces', 'multiplies', 'wastes', 'exceeds'],
+        correct: 0,
+        explanation: 'EN: Delivering mist directly to roots saves water, so it "reduces" water consumption by up to 90%.\n繁中：正確答案為 (A) reduces「減少、降低」。水耕與氣耕系統將富含養分的霧氣直接輸送至植物根部，與戶外農業相比可減少高達 90% 的用水量。',
+        vocab: [
+          { word: 'consumption', pos: 'n.', zh: '消耗量、消費', example: 'Energy-efficient appliances help lower household electricity consumption.' }
+        ]
+      },
+      {
+        id: 18,
+        part: 2,
+        passageId: 'p2_vertical_farming',
+        blankNumber: 18,
+        stem: 'Blank [18]: "______, because crops are cultivated inside sealed buildings, farmers rarely need to apply chemical pesticides."',
+        options: ['Furthermore', 'Otherwise', 'Nevertheless', 'Meanwhile'],
+        correct: 0,
+        explanation: 'EN: "Furthermore" adds another positive environmental benefit to the water-saving advantage mentioned in the prior sentence.\n繁中：正確答案為 (A) Furthermore「此外、而且」。前句說明垂直農業省水 90%，本句進一步補充另一項優點（在密閉建築內種植幾乎不需使用化學農藥），故用表遞進的轉承詞 Furthermore。',
+        vocab: [
+          { word: 'cultivate', pos: 'v.', zh: '耕作、培育、培養', example: 'Terraced fields are used to cultivate rice on steep hillsides.' }
+        ]
+      },
+      {
+        id: 19,
+        part: 2,
+        passageId: 'p2_vertical_farming',
+        blankNumber: 19,
+        stem: 'Blank [19]: "______ these impressive environmental advantages, vertical farming still faces significant economic hurdles."',
+        options: ['Despite', 'Although', 'Unless', 'Because'],
+        correct: 0,
+        explanation: 'EN: "Despite" is a preposition introducing contrast before a noun phrase ("these impressive environmental advantages").\n繁中：正確答案為 (A) Despite「儘管」。空格後方為名詞片語 these impressive environmental advantages，且前後文呈讓步轉折關係，故須選介系詞 Despite。(B) Although 為連接詞，後須接完整子句。',
+        vocab: [
+          { word: 'hurdle', pos: 'n.', zh: '障礙、難關', example: 'High startup costs remain the main hurdle for new clean-tech firms.' }
+        ]
+      },
+      {
+        id: 20,
+        part: 2,
+        passageId: 'p2_vertical_farming',
+        blankNumber: 20,
+        stem: 'Blank [20]: "...experts believe vertical farms will play an increasingly ______ role in feeding major metropolitan areas."',
+        options: ['vital', 'fragile', 'reluctant', 'temporary'],
+        correct: 0,
+        explanation: 'EN: "Play a vital role" is an essential collocation meaning to serve a crucial function.\n繁中：正確答案為 (A) vital「極重要的、不可或缺的」。固定搭配：play a vital role in...（在……中扮演關鍵角色）。',
+        vocab: [
+          { word: 'metropolitan', pos: 'adj.', zh: '大都會的', example: 'The subway serves the entire metropolitan area.' }
+        ]
+      },
+
+      // --- Passage 2: Circadian Rhythms & Shift Work (Q21 - Q25) ---
+      {
+        id: 21,
+        part: 2,
+        passageId: 'p2_circadian_rhythms',
+        blankNumber: 21,
+        stem: 'Blank [21]: "...signaling the brain when to feel alert and when to ______ for rest."',
+        options: ['prepare', 'preparing', 'prepared', 'prepares'],
+        correct: 0,
+        explanation: 'EN: Parallel structure with "when to feel alert" requires the base verb "prepare" after "when to".\n繁中：正確答案為 (A) prepare。不定詞片語 when to prepare for rest 與前方的 when to feel alert 形成對稱平行結構（when to + 原形動詞）。',
+        vocab: [
+          { word: 'synchronize', pos: 'v.', zh: '使同步、協調', example: 'Smartwatches automatically synchronize data with your phone.' }
+        ]
+      },
+      {
+        id: 22,
+        part: 2,
+        passageId: 'p2_circadian_rhythms',
+        blankNumber: 22,
+        stem: 'Blank [22]: "...forces the body to operate ______ its biological programming."',
+        options: ['against', 'toward', 'beside', 'within'],
+        correct: 0,
+        explanation: 'EN: "Operate against" means to work in opposition to the body’s natural biological rhythm.\n繁中：正確答案為 (A) against「違背、逆著」。夜間保持清醒、白天試圖入睡，會迫使身體「違背」原本的生理設定運作（operate against its biological programming）。',
+        vocab: [
+          { word: 'disrupt', pos: 'v.', zh: '擾亂、中斷', example: 'Jet lag temporarily disrupts your normal sleep pattern.' }
+        ]
+      },
+      {
+        id: 23,
+        part: 2,
+        passageId: 'p2_circadian_rhythms',
+        blankNumber: 23,
+        stem: 'Blank [23]: "Wearing dark sunglasses during the morning commute home helps prevent sunlight ______ triggering daytime alertness hormones."',
+        options: ['from', 'into', 'with', 'about'],
+        correct: 0,
+        explanation: 'EN: The verb pattern is "prevent + object + from + gerund (-ing)".\n繁中：正確答案為 (A) from。固定動詞片語：prevent + 受詞 + from + V-ing（防止／阻止某事物發生……）。',
+        vocab: [
+          { word: 'chronic', pos: 'adj.', zh: '長期的、慢性的', example: 'Chronic sleep deprivation can impair memory and focus.' }
+        ]
+      },
+      {
+        id: 24,
+        part: 2,
+        passageId: 'p2_circadian_rhythms',
+        blankNumber: 24,
+        stem: 'Blank [24]: "______, keeping the bedroom completely dark and cool supports deeper daytime recovery sleep."',
+        options: ['In addition', 'On the contrary', 'Otherwise', 'For instance'],
+        correct: 0,
+        explanation: 'EN: "In addition" introduces a second practical tip for shift workers following the advice about sunglasses.\n繁中：正確答案為 (A) In addition「此外」。前句建議早晨通勤戴深色太陽眼鏡，本句繼續補充另一項改善白天睡眠的建議（保持臥室全暗涼爽），故選表並列補充的 In addition。',
+        vocab: [
+          { word: 'consistent', pos: 'adj.', zh: '一致的、規律的', example: 'Maintaining a consistent bedtime improves sleep quality.' }
+        ]
+      },
+      {
+        id: 25,
+        part: 2,
+        passageId: 'p2_circadian_rhythms',
+        blankNumber: 25,
+        stem: 'Blank [25]: "...giving workers adequate time to ______ between shift changes."',
+        options: ['adjust', 'hesitate', 'complain', 'vanish'],
+        correct: 0,
+        explanation: 'EN: "Adjust" means to adapt gradually to a new schedule or environment.\n繁中：正確答案為 (A) adjust「適應、調整」。句意：「雇主也可透過設計順時針輪替的班表來協助，讓員工在換班之間有充足的時間適應。」(B) hesitate 猶豫；(C) complain 抱怨；(D) vanish 消失。',
+        vocab: [
+          { word: 'adjust', pos: 'v.', zh: '適應、調整', example: 'It takes a few days to adjust to a new time zone.' },
+          { word: 'adequate', pos: 'adj.', zh: '充足的、適當的', example: 'Make sure you drink adequate water during summer hikes.' }
+        ]
+      },
+
+      // ==================== PART 3: READING COMPREHENSION (Q26 - Q40) ====================
+      // --- Passage A: Riverside Community Maker-Space (Q26 - Q28) ---
+      {
+        id: 26,
+        part: 3,
+        passageId: 'p3_makerspace',
+        blankNumber: null,
+        stem: 'Which workshop allows participants to register in person on the day of the event?',
+        options: [
+          'Intro to Laser-Cut Wooden Coasters',
+          'Smartphone Stand Woodworking Clinic',
+          'Soldering & LED Desk Light Basics',
+          '3D Printing Orientation Tour'
+        ],
+        correct: 1,
+        explanation: 'EN: Under "Smartphone Stand Woodworking Clinic", the notice states: "Free admission; walk-in registration opens 30 minutes prior to the session."\n繁中：正確答案為 (B)。公告中說明木工手機架課程（Smartphone Stand Woodworking Clinic）免費參加，且活動開始前 30 分鐘開放現場報名（walk-in registration）；其餘兩場實作工作坊皆須事先線上報名（advance sign-up required）。',
+        vocab: [
+          { word: 'mandatory', pos: 'adj.', zh: '強制的、規定的', example: 'Safety goggles are mandatory inside the chemistry laboratory.' }
+        ]
+      },
+      {
+        id: 27,
+        part: 3,
+        passageId: 'p3_makerspace',
+        blankNumber: null,
+        stem: 'What will happen to a visitor who arrives wearing open-toed sandals?',
+        options: [
+          'They will be charged an extra NT$150 safety fee.',
+          'They will not be allowed near the workshop machinery.',
+          'They will only be permitted to join the afternoon sessions.',
+          'They will receive a free pair of protective shoe covers.'
+        ],
+        correct: 1,
+        explanation: 'EN: The Safety Notes clearly state: "visitors wearing sandals will not be permitted near machinery."\n繁中：正確答案為 (B)。安全須知明確規定所有工作坊必須穿包鞋（closed-toe shoes），穿涼鞋的訪客將不被允許靠近機械設備（will not be permitted near machinery）。',
+        vocab: [
+          { word: 'engrave', pos: 'v.', zh: '雕刻、銘刻', example: 'The jeweler can engrave your initials inside the ring.' }
+        ]
+      },
+      {
+        id: 28,
+        part: 3,
+        passageId: 'p3_makerspace',
+        blankNumber: null,
+        stem: 'What benefit is offered to attendees who join as annual members during the Open House?',
+        options: [
+          'Free materials for all three featured workshops',
+          'A 20% discount on their first three months of studio access',
+          'Unlimited private tutoring from local instructors',
+          'Complimentary wood and electronics kits to take home'
+        ],
+        correct: 1,
+        explanation: 'EN: The final sentence states that new annual members during the Open House "will receive a 20% discount on their first three months of studio access."\n繁中：正確答案為 (B)。文末指出在開放日當天加入年度會員者，前三個月的工作室使用費可享八折優惠（20% discount）。',
+        vocab: [
+          { word: 'prior to', pos: 'prep. phr.', zh: '在……之前', example: 'Please arrive at least fifteen minutes prior to departure.' }
+        ]
+      },
+
+      // --- Passage B: Logistics Update Email (Q29 - Q31) ---
+      {
+        id: 29,
+        part: 3,
+        passageId: 'p3_logistics_email',
+        blankNumber: null,
+        stem: 'Why is part of Purchase Order #LG-7042 delayed?',
+        options: [
+          'The ergonomic task chairs failed warehouse quality inspection.',
+          'A cargo ship carrying the acoustic pods was rerouted due to a typhoon.',
+          'BrightStar Tech requested a change in the delivery address.',
+          'The Kaohsiung Port distribution hub is closed for holidays.'
+        ],
+        correct: 1,
+        explanation: 'EN: The second paragraph explains that "the cargo vessel carrying our latest shipment of Acoustic Meeting Pods was rerouted due to severe typhoon conditions in the South China Sea."\n繁中：正確答案為 (B)。信件第二段說明，所有辦公椅皆已通過檢驗可立即出貨，但載運隔音會議艙的貨輪因南海強烈颱風而改道（rerouted），導致部分貨物延誤。',
+        vocab: [
+          { word: 'reroute', pos: 'v.', zh: '使改道、改變路線', example: 'Flights were rerouted around the volcanic ash cloud.' }
+        ]
+      },
+      {
+        id: 30,
+        part: 3,
+        passageId: 'p3_logistics_email',
+        blankNumber: null,
+        stem: 'What will Apex Office Supply do if Ms. Lin does not reply by 5:00 PM on November 13?',
+        options: [
+          'Cancel the order for the four acoustic meeting pods',
+          'Hold all items until November 23 for a single delivery',
+          'Deliver the twelve chairs on November 14 and the pods on November 23',
+          'Charge an extra fee for splitting the shipment into two trucks'
+        ],
+        correct: 2,
+        explanation: 'EN: The email states that if no response is received by 5:00 PM on November 13, Apex will automatically execute Option A (chairs on Nov 14, pods on Nov 23).\n繁中：正確答案為 (C)。信件指出若未於 11 月 13 日下午 5 點前收到回覆，將自動執行方案 A（11 月 14 日先送 12 張辦公椅，11 月 23 日再送 4 座隔音艙）。',
+        vocab: [
+          { word: 'consolidate', pos: 'v.', zh: '合併、整合、鞏固', example: 'The company consolidated three regional offices into one hub.' }
+        ]
+      },
+      {
+        id: 31,
+        part: 3,
+        passageId: 'p3_logistics_email',
+        blankNumber: null,
+        stem: 'How is Apex Office Supply compensating BrightStar Tech for the inconvenience?',
+        options: [
+          'By offering a 5% credit toward their next corporate invoice',
+          'By providing two additional ergonomic mesh chairs for free',
+          'By refunding 50% of the current purchase order total',
+          'By upgrading all meeting pods to a larger luxury model'
+        ],
+        correct: 0,
+        explanation: 'EN: At the end of the email, Marcus Wu writes: "we have applied a 5% credit toward your next corporate invoice as a gesture of goodwill."\n繁中：正確答案為 (A)。信末提到 Apex Office Supply 已提供下次企業帳單 5% 的折抵額度（a 5% credit toward your next corporate invoice）以表誠意。',
+        vocab: [
+          { word: 'invoice', pos: 'n.', zh: '發票、請款單', example: 'Please settle the invoice within thirty days of receipt.' }
+        ]
+      },
+
+      // --- Passage C: Micro-Breaks Research (Q32 - Q34) ---
+      {
+        id: 32,
+        part: 3,
+        passageId: 'p3_microbreaks',
+        blankNumber: null,
+        stem: 'What is the main finding of the workplace studies discussed in the passage?',
+        options: [
+          'Working continuously until lunch produces the highest daily output.',
+          'Brief, regular pauses reduce fatigue and improve task engagement.',
+          'Employees need at least thirty minutes of rest every hour to avoid eye strain.',
+          'Checking social media messages is the fastest way to refresh mental focus.'
+        ],
+        correct: 1,
+        explanation: 'EN: Paragraph 2 states that employees who took short, regular micro-breaks "reported lower exhaustion and higher task engagement than colleagues who worked continuously until midday."\n繁中：正確答案為 (B)。第二段指出，定期進行 30 秒至 5 分鐘「微休息」的員工，比一路連續工作到中午的同事疲憊感更低、工作投入度更高。',
+        vocab: [
+          { word: 'deplete', pos: 'v.', zh: '耗盡、使枯竭', example: 'Overfishing has severely depleted global tuna populations.' }
+        ]
+      },
+      {
+        id: 33,
+        part: 3,
+        passageId: 'p3_microbreaks',
+        blankNumber: null,
+        stem: 'Why did scrolling through social media during a break fail to restore mental energy?',
+        options: [
+          'It required the brain to keep processing heavy visual information.',
+          'It caused employees to exceed their five-minute break limit.',
+          'It lowered blood circulation in the neck and shoulders.',
+          'It prevented workers from drinking enough water during the day.'
+        ],
+        correct: 0,
+        explanation: 'EN: The last sentence explains that scrolling through rapid streams of text and images "forced the brain to continue processing heavy visual stimuli."\n繁中：正確答案為 (A)。末段解釋，滑社群媒體時快速流動的文字與影像會迫使大腦持續處理大量視覺刺激（heavy visual stimuli），因此無法真正恢復專注能量。',
+        vocab: [
+          { word: 'stimuli', pos: 'n. (pl.)', zh: '刺激物（單數為 stimulus）', example: 'Infants respond quickly to bright visual stimuli.' }
+        ]
+      },
+      {
+        id: 34,
+        part: 3,
+        passageId: 'p3_microbreaks',
+        blankNumber: null,
+        stem: 'Which break activity is recommended by researchers to genuinely recharge focus?',
+        options: [
+          'Replying to personal text messages at one’s desk',
+          'Reading online news headlines for three minutes',
+          'Looking out a window at distant trees or plants',
+          'Organizing digital spreadsheets while eating lunch'
+        ],
+        correct: 2,
+        explanation: 'EN: Paragraph 3 lists standing up to stretch, "looking out a window at distant greenery," or walking to fetch water as effective ways to recharge.\n繁中：正確答案為 (C)。第三段列舉起身伸展、望向窗外遠處綠意（distant greenery）或起身倒水，能讓大腦專注網絡真正充電。',
+        vocab: [
+          { word: 'erode', pos: 'v.', zh: '侵蝕、逐漸削弱', example: 'Constant criticism can erode a team’s confidence.' }
+        ]
+      },
+
+      // --- Passage D: Transient Electronics (Q35 - Q37) ---
+      {
+        id: 35,
+        part: 3,
+        passageId: 'p3_transient_electronics',
+        blankNumber: null,
+        stem: 'How do "transient electronics" differ from conventional electronic devices?',
+        options: [
+          'They are built to last for decades without battery replacements.',
+          'They dissolve harmlessly after functioning for a planned period.',
+          'They are powered exclusively by deep ocean water currents.',
+          'They are manufactured entirely from recycled plastic bottles.'
+        ],
+        correct: 1,
+        explanation: 'EN: Paragraph 1 states that transient devices "are designed to function reliably for a set period and then dissolve harmlessly when exposed to water or bodily fluids."\n繁中：正確答案為 (B)。第一段說明「瞬態電子裝置」在穩定運作一段預定時間後，接觸到水或體液便會無害溶解，不同於追求多年耐用的傳統電子產品。',
+        vocab: [
+          { word: 'dissolve', pos: 'v.', zh: '溶解、消散', example: 'Stir the mixture until the sugar dissolves completely.' }
+        ]
+      },
+      {
+        id: 36,
+        part: 3,
+        passageId: 'p3_transient_electronics',
+        blankNumber: null,
+        stem: 'What is a major medical advantage of water-soluble post-surgical sensors?',
+        options: [
+          'They eliminate the need for a second surgery to remove the sensor.',
+          'They permanently replace damaged heart and lung tissue.',
+          'They allow surgeons to perform operations without anesthesia.',
+          'They prevent all bacterial infections after hospital discharge.'
+        ],
+        correct: 0,
+        explanation: 'EN: Paragraph 2 notes that conventional implants require "a second surgical procedure... to extract the device," whereas transient monitors safely dissolve inside the body.\n繁中：正確答案為 (A)。第二段指出傳統術後體內感測器需動第二次手術取出，而水溶性瞬態感測器在復原後會自行安全溶解並被人體吸收或排出，免除二次手術。',
+        vocab: [
+          { word: 'benign', pos: 'adj.', zh: '無害的、良性的', example: 'The test confirmed that the skin growth was completely benign.' }
+        ]
+      },
+      {
+        id: 37,
+        part: 3,
+        passageId: 'p3_transient_electronics',
+        blankNumber: null,
+        stem: 'What happens to the agricultural transient sensors mentioned in the final paragraph?',
+        options: [
+          'Farmers collect and recharge them every winter.',
+          'They dissolve after autumn rains without leaving toxic waste.',
+          'They convert fertilizer runoff into clean drinking water.',
+          'They remain buried underground to warm the soil in spring.'
+        ],
+        correct: 1,
+        explanation: 'EN: The final sentence states that the biodegradable monitors "dissolve completely after the first heavy autumn rains without leaving toxic residue behind."\n繁中：正確答案為 (B)。末段提到農田裡的生物可分解感測器在第一場秋雨過後便會完全溶解，不會留下任何有毒殘留物（toxic residue）。',
+        vocab: [
+          { word: 'residue', pos: 'n.', zh: '殘留物、殘渣', example: 'Wash fruit thoroughly to remove any pesticide residue.' }
+        ]
+      },
+
+      // --- Passage E: Seagrass Meadows (Q38 - Q40) ---
+      {
+        id: 38,
+        part: 3,
+        passageId: 'p3_seagrass',
+        blankNumber: null,
+        stem: 'Why are seagrass meadows able to store carbon for thousands of years?',
+        options: [
+          'Their wooden trunks grow taller than tropical rainforest trees.',
+          'They trap organic carbon deep inside oxygen-poor seabed sediments.',
+          'They freeze carbon dioxide into solid ice along coastal cliffs.',
+          'They prevent ocean currents from reaching shallow bays.'
+        ],
+        correct: 1,
+        explanation: 'EN: Paragraph 2 explains that "seagrasses trap organic carbon deep within oxygen-poor underwater sediments," where it remains locked away for millennia.\n繁中：正確答案為 (B)。第二段指出海草將有機碳深鎖在缺氧的海床沉積物（oxygen-poor underwater sediments）中，因此可安全封存數千年之久。',
+        vocab: [
+          { word: 'sediment', pos: 'n.', zh: '沉積物、泥沙', example: 'Rivers carry rich sediment down to coastal deltas.' }
+        ]
+      },
+      {
+        id: 39,
+        part: 3,
+        passageId: 'p3_seagrass',
+        blankNumber: null,
+        stem: 'According to the passage, how fast do blue carbon ecosystems capture carbon compared to land forests?',
+        options: [
+          'At roughly half the speed per unit area',
+          'At the exact same rate as tropical rainforests',
+          'Up to thirty-five times faster per unit area',
+          'Only during winter months when trees lose their leaves'
+        ],
+        correct: 2,
+        explanation: 'EN: Paragraph 1 states that blue carbon ecosystems are "capable of capturing and storing carbon dioxide up to thirty-five times faster per unit area than terrestrial forests."\n繁中：正確答案為 (C)。第一段明確提到藍碳生態系每單位面積捕捉與儲存二氧化碳的速度，最高可達陸地森林的 35 倍（thirty-five times faster）。',
+        vocab: [
+          { word: 'terrestrial', pos: 'adj.', zh: '陸地的、地球的', example: 'Elephants are the largest living terrestrial mammals.' }
+        ]
+      },
+      {
+        id: 40,
+        part: 3,
+        passageId: 'p3_seagrass',
+        blankNumber: null,
+        stem: 'Which of the following is NOT mentioned as a threat to global seagrass coverage?',
+        options: [
+          'Coastal dredging',
+          'Agricultural runoff',
+          'Careless boat anchoring',
+          'Overfishing of deep-sea sharks'
+        ],
+        correct: 3,
+        explanation: 'EN: Paragraph 3 lists "coastal dredging, agricultural runoff, and careless boat anchoring" as causes of seagrass loss; overfishing of deep-sea sharks is not mentioned.\n繁中：正確答案為 (D)。第三段列出的海草床破壞原因為沿海疏濬（coastal dredging）、農業逕流（agricultural runoff）與不當下錨（careless boat anchoring），並未提及過度捕撈深海鯊魚。',
+        vocab: [
+          { word: 'nursery', pos: 'n.', zh: '育幼場、苗圃、托兒所', example: 'Mangrove roots serve as a safe nursery for young reef fish.' }
+        ]
+      }
+    ];
+
+    /* ============================================================================
+       3. SEEDED GEPT INTERMEDIATE VOCABULARY DECK
+       ============================================================================ */
+    const DEFAULT_VOCAB_DECK = [
+      { word: 'launch', pos: 'v.', zh: '啟動、發起、推出', example: 'The company plans to launch its new electric vehicle in October.', mastered: false },
+      { word: 'compromise', pos: 'v./n.', zh: '妥協、損害品質；折衷方案', example: 'We never compromise on food safety standards.', mastered: false },
+      { word: 'with a view to', pos: 'prep. phr.', zh: '為了、著眼於（後接 V-ing）', example: 'They renovated the warehouse with a view to opening a gallery.', mastered: false },
+      { word: 'synchronize', pos: 'v.', zh: '使同步、協調', example: 'Smartwatches automatically synchronize data with your phone.', mastered: false },
+      { word: 'mandatory', pos: 'adj.', zh: '強制的、規定的', example: 'Safety goggles are mandatory inside the chemistry laboratory.', mastered: false },
+      { word: 'deplete', pos: 'v.', zh: '耗盡、使枯竭', example: 'Overfishing has severely depleted global tuna populations.', mastered: false },
+      { word: 'benign', pos: 'adj.', zh: '無害的、良性的', example: 'The test confirmed that the skin growth was completely benign.', mastered: false },
+      { word: 'terrestrial', pos: 'adj.', zh: '陸地的、地球的', example: 'Elephants are the largest living terrestrial mammals.', mastered: false }
+    ];
+
+    /* ============================================================================
+       4. APPLICATION STATE & STORAGE KEYS
+       ============================================================================ */
+    const STORAGE_KEYS = {
+      VOCAB: 'gept_inter_vocab_v2',
+      MISTAKES: 'gept_inter_mistakes_v2',
+      HISTORY: 'gept_inter_history_v2',
+      FONT_SIZE: 'gept_inter_fontsize_v2'
+    };
+
+    const state = {
+      route: 'dashboard', // 'dashboard' | 'test' | 'report' | 'ai-generator' | 'vocab' | 'mistakes'
+      practiceInstantMode: true,
+      passageFontSize: SafeStorage.getItem(STORAGE_KEYS.FONT_SIZE) || 'base', // 'sm' | 'base' | 'lg'
+
+      // Active Test Session
+      session: null,
+      timerInterval: null,
+      drawerOpen: false,
+
+      // Report View Filter
+      reportFilter: 'all', // 'all' | 'wrong' | 'flagged'
+
+      // AI Generator State
+      aiConfig: {
+        part: 1,
+        theme: 'Workplace & Business (職場與商業)'
+      },
+      aiLoading: false,
+      aiError: null,
+      aiGeneratedSet: null,
+
+      // Flashcards State
+      vocabDeck: [],
+      vocabFilter: 'all', // 'all' | 'review' | 'mastered'
+      flashcardIndex: 0,
+      flashcardFlipped: false,
+
+      // Mistake Bank & History
+      mistakes: [],
+      history: []
+    };
+
+    /* ============================================================================
+       5. INITIALIZATION & PERSISTENCE HELPERS
+       ============================================================================ */
+    function loadPersistedData() {
+      try {
+        const rawVocab = SafeStorage.getItem(STORAGE_KEYS.VOCAB);
+        if (rawVocab) {
+          const parsed = JSON.parse(rawVocab);
+          state.vocabDeck = Array.isArray(parsed) && parsed.length > 0 ? parsed : [...DEFAULT_VOCAB_DECK];
+        } else {
+          state.vocabDeck = [...DEFAULT_VOCAB_DECK];
+          SafeStorage.setItem(STORAGE_KEYS.VOCAB, JSON.stringify(state.vocabDeck));
+        }
+      } catch (e) {
+        state.vocabDeck = [...DEFAULT_VOCAB_DECK];
+      }
+
+      try {
+        const rawMistakes = SafeStorage.getItem(STORAGE_KEYS.MISTAKES);
+        state.mistakes = rawMistakes ? JSON.parse(rawMistakes) : [];
+        if (!Array.isArray(state.mistakes)) state.mistakes = [];
+      } catch (e) {
+        state.mistakes = [];
+      }
+
+      try {
+        const rawHistory = SafeStorage.getItem(STORAGE_KEYS.HISTORY);
+        state.history = rawHistory ? JSON.parse(rawHistory) : [];
+        if (!Array.isArray(state.history)) state.history = [];
+      } catch (e) {
+        state.history = [];
+      }
+    }
+
+    function saveVocabDeck() {
+      SafeStorage.setItem(STORAGE_KEYS.VOCAB, JSON.stringify(state.vocabDeck));
+      updateHeaderBadges();
+    }
+
+    function saveMistakes() {
+      SafeStorage.setItem(STORAGE_KEYS.MISTAKES, JSON.stringify(state.mistakes));
+      updateHeaderBadges();
+    }
+
+    function saveHistory() {
+      SafeStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(state.history));
+    }
+
+    function updateHeaderBadges() {
+      const vocabEl = document.getElementById('nav-vocab-count');
+      const mistakeEl = document.getElementById('nav-mistake-count');
+      if (vocabEl) vocabEl.textContent = String(state.vocabDeck.length);
+      if (mistakeEl) mistakeEl.textContent = String(state.mistakes.length);
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const navKey = btn.getAttribute('data-nav');
+        const active = (state.route === navKey) || (state.route === 'test' && navKey === 'dashboard') || (state.route === 'report' && navKey === 'dashboard');
+        btn.className = active
+          ? 'nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1E3A8A]/10 text-[#1E3A8A] transition-colors flex items-center gap-1.5 cursor-pointer'
+          : 'nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-1.5 cursor-pointer';
+      });
+    }
+
+    /* ============================================================================
+       6. UI UTILITIES (HTML ESCAPING, TOASTS, CUSTOM MODAL, SPEECH)
+       ============================================================================ */
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        warning: 'bg-amber-700 text-white border-amber-600',
+        error: 'bg-rose-700 text-white border-rose-600',
+        info: 'bg-slate-900 text-white border-slate-700'
+      };
+      toast.className = `pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg border text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all duration-300 ${colors[type] || colors.info}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(6px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 2600);
+    }
+
+    let modalConfirmCallback = null;
+
+    function openModal({ title, bodyHtml, confirmLabel = '確定', cancelLabel = '取消', confirmVariant = 'primary', onConfirm }) {
+      const modal = document.getElementById('custom-modal');
+      const titleEl = document.getElementById('modal-title');
+      const bodyEl = document.getElementById('modal-body');
+      const actionsEl = document.getElementById('modal-actions');
+      if (!modal || !titleEl || !bodyEl || !actionsEl) return;
+
+      titleEl.textContent = title;
+      bodyEl.innerHTML = bodyHtml;
+      modalConfirmCallback = typeof onConfirm === 'function' ? onConfirm : null;
+
+      const btnClass = confirmVariant === 'danger'
+        ? 'px-4 py-2 rounded-xl text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 transition-colors cursor-pointer'
+        : 'px-4 py-2 rounded-xl text-sm font-bold bg-[#1E3A8A] text-white hover:bg-[#2B4F9E] transition-colors cursor-pointer';
+
+      actionsEl.innerHTML = `
+        ${cancelLabel ? `<button type="button" data-action="modal-cancel" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">${escapeHtml(cancelLabel)}</button>` : ''}
+        <button type="button" data-action="modal-confirm" class="${btnClass}">${escapeHtml(confirmLabel)}</button>
+      `;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('custom-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      modalConfirmCallback = null;
+    }
+
+    function speakWord(word) {
+      if (!word) return;
+      if (!HAS_SPEECH) {
+        showToast('此瀏覽器環境不支援語音朗讀功能', 'warning');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(word);
+        utter.lang = 'en-US';
+        utter.rate = 0.92;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        showToast('語音播放發生異常', 'warning');
+      }
+    }
+
+    function addWordToDeck(vocabObj) {
+      if (!vocabObj || !vocabObj.word) return;
+      const normalized = vocabObj.word.trim().toLowerCase();
+      const exists = state.vocabDeck.some(v => v.word.trim().toLowerCase() === normalized);
+      if (exists) {
+        showToast(`「${vocabObj.word}」已在單字卡中`, 'info');
+        return;
+      }
+      state.vocabDeck.unshift({
+        word: vocabObj.word.trim(),
+        pos: vocabObj.pos || 'n./v.',
+        zh: vocabObj.zh || '重要詞彙',
+        example: vocabObj.example || '',
+        mastered: false
+      });
+      saveVocabDeck();
+      showToast(`已將「${vocabObj.word}」加入單字卡！`, 'success');
+      if (state.route === 'test' || state.route === 'report') {
+        renderApp();
+      }
+    }
+
+    /* ============================================================================
+       7. TEST SESSION ENGINE (START, TIMER, ANSWER, FLAG, SUBMIT, SCORING)
+       ============================================================================ */
+    function stopTimer() {
+      if (state.timerInterval) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      state.timerInterval = setInterval(() => {
+        if (!state.session || state.session.paused || state.route !== 'test') return;
+        if (state.session.secondsLeft > 0) {
+          state.session.secondsLeft -= 1;
+          updateTimerDOM();
+          if (state.session.secondsLeft === 0) {
+            stopTimer();
+            showToast('測驗時間到，系統已自動交卷！', 'warning');
+            finalizeTestSubmission();
+          }
+        }
+      }, 1000);
+    }
+
+    function formatTime(totalSeconds) {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateTimerDOM() {
+      const el = document.getElementById('test-timer-display');
+      if (!el || !state.session) return;
+      el.textContent = formatTime(state.session.secondsLeft);
+      if (state.session.secondsLeft <= 300) {
+        el.classList.add('text-rose-600', 'timer-urgent');
+        el.classList.remove('text-[#1E3A8A]');
+      } else {
+        el.classList.remove('text-rose-600', 'timer-urgent');
+        el.classList.add('text-[#1E3A8A]');
+      }
+    }
+
+    function startTestSession({ title, questions, passages, durationMinutes, instantFeedback, isOfficialFull = false }) {
+      if (!questions || questions.length === 0) {
+        showToast('目前沒有可用的題目', 'warning');
+        return;
+      }
+      stopTimer();
+      const passageMap = {};
+      (passages || []).forEach(p => {
+        passageMap[p.id] = p;
+      });
+
+      state.session = {
+        title,
+        questions,
+        passageMap,
+        currentIndex: 0,
+        answers: {}, // { [questionId]: optionIndex }
+        revealed: {}, // { [questionId]: true } (for instant feedback mode)
+        flagged: {},  // { [questionId]: true }
+        durationSeconds: durationMinutes * 60,
+        secondsLeft: durationMinutes * 60,
+        paused: false,
+        instantFeedback: Boolean(instantFeedback),
+        isOfficialFull: Boolean(isOfficialFull),
+        startedAt: Date.now()
+      };
+      state.drawerOpen = false;
+      state.route = 'test';
+      startTimer();
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startOfficialFullMock() {
+      startTestSession({
+        title: '全真模擬測驗 (40 題完整版)',
+        questions: OFFICIAL_QUESTIONS,
+        passages: OFFICIAL_PASSAGES,
+        durationMinutes: 45,
+        instantFeedback: false,
+        isOfficialFull: true
+      });
+    }
+
+    function startPartPractice(partNum) {
+      const partNames = {
+        1: '第一部分：詞彙和結構 (Q1–15)',
+        2: '第二部分：段落填空 (Q16–25)',
+        3: '第三部分：閱讀理解 (Q26–40)'
+      };
+      const durations = { 1: 12, 2: 12, 3: 21 };
+      const qs = OFFICIAL_QUESTIONS.filter(q => q.part === partNum);
+      startTestSession({
+        title: partNames[partNum],
+        questions: qs,
+        passages: OFFICIAL_PASSAGES,
+        durationMinutes: durations[partNum],
+        instantFeedback: state.practiceInstantMode,
+        isOfficialFull: false
+      });
+    }
+
+    function startMistakeDrill() {
+      if (state.mistakes.length === 0) {
+        showToast('錯題本目前是空的，太棒了！', 'info');
+        return;
+      }
+      const neededPassageIds = new Set(state.mistakes.map(q => q.passageId).filter(Boolean));
+      const passages = OFFICIAL_PASSAGES.filter(p => neededPassageIds.has(p.id));
+      startTestSession({
+        title: `錯題強化複習 (${state.mistakes.length} 題)`,
+        questions: [...state.mistakes],
+        passages,
+        durationMinutes: Math.max(5, Math.ceil(state.mistakes.length * 1.2)),
+        instantFeedback: true,
+        isOfficialFull: false
+      });
+    }
+
+    function selectAnswerOption(optionIdx) {
+      if (!state.session) return;
+      const q = state.session.questions[state.session.currentIndex];
+      if (!q) return;
+
+      // In instant feedback mode, lock once revealed
+      if (state.session.instantFeedback && state.session.revealed[q.id]) {
+        return;
+      }
+
+      state.session.answers[q.id] = optionIdx;
+      if (state.session.instantFeedback) {
+        state.session.revealed[q.id] = true;
+      }
+      renderApp();
+    }
+
+    function toggleFlagCurrent() {
+      if (!state.session) return;
+      const q = state.session.questions[state.session.currentIndex];
+      if (!q) return;
+      if (state.session.flagged[q.id]) {
+        delete state.session.flagged[q.id];
+      } else {
+        state.session.flagged[q.id] = true;
+      }
+      renderApp();
+    }
+
+    function jumpToQuestionIndex(idx) {
+      if (!state.session) return;
+      if (idx < 0 || idx >= state.session.questions.length) return;
+      state.session.currentIndex = idx;
+      state.drawerOpen = false;
+      renderApp();
+    }
+
+    function jumpToQuestionById(qId) {
+      if (!state.session) return;
+      const idx = state.session.questions.findIndex(q => String(q.id) === String(qId));
+      if (idx !== -1) {
+        jumpToQuestionIndex(idx);
+      }
+    }
+
+    function requestSubmitTest() {
+      if (!state.session) return;
+      const total = state.session.questions.length;
+      const answeredCount = state.session.questions.filter(q => state.session.answers[q.id] !== undefined).length;
+      const unanswered = total - answeredCount;
+
+      openModal({
+        title: '確認交卷並計算成績？',
+        bodyHtml: unanswered > 0
+          ? `<p>您目前已完成 <strong class="text-slate-900">${answeredCount} / ${total}</strong> 題，尚有 <strong class="text-rose-600">${unanswered} 題未作答</strong>。交卷後將立即顯示分數報告與逐題詳解。</p>`
+          : `<p>太棒了！您已完成全部 <strong class="text-emerald-700">${total} 題</strong> 作答。確定現在交卷並查看成績分析嗎？</p>`,
+        confirmLabel: '確認交卷',
+        cancelLabel: '繼續作答',
+        confirmVariant: 'primary',
+        onConfirm: () => {
+          closeModal();
+          finalizeTestSubmission();
+        }
+      });
+    }
+
+    function finalizeTestSubmission() {
+      if (!state.session) return;
+      stopTimer();
+
+      const sess = state.session;
+      let correctCount = 0;
+      const partStats = {
+        1: { correct: 0, total: 0 },
+        2: { correct: 0, total: 0 },
+        3: { correct: 0, total: 0 }
+      };
+
+      const existingMistakeIds = new Set(state.mistakes.map(m => String(m.id)));
+      let newlyAddedMistakes = 0;
+
+      sess.questions.forEach(q => {
+        const userAns = sess.answers[q.id];
+        const isCorrect = userAns === q.correct;
+        if (partStats[q.part]) {
+          partStats[q.part].total += 1;
+          if (isCorrect) partStats[q.part].correct += 1;
+        }
+        if (isCorrect) {
+          correctCount += 1;
+        } else {
+          // Record missed question into Mistake Bank (avoid duplicates)
+          if (!existingMistakeIds.has(String(q.id))) {
+            // Attach passage data if needed for standalone review
+            const passageObj = q.passageId ? sess.passageMap[q.passageId] : null;
+            state.mistakes.unshift({
+              ...q,
+              _savedPassage: passageObj || q._savedPassage || null
+            });
+            existingMistakeIds.add(String(q.id));
+            newlyAddedMistakes += 1;
+          }
+        }
+      });
+
+      if (newlyAddedMistakes > 0) {
+        saveMistakes();
+      }
+
+      const total = sess.questions.length;
+      const percentage = Math.round((correctCount / total) * 100);
+      // GEPT Intermediate Reading Scaled Score: 0 to 120 (Passing benchmark = 72)
+      const scaledScore = Math.round((correctCount / total) * 120);
+      const passed = scaledScore >= 72;
+      const elapsedSeconds = Math.max(1, sess.durationSeconds - sess.secondsLeft);
+
+      const report = {
+        title: sess.title,
+        questions: sess.questions,
+        passageMap: sess.passageMap,
+        answers: { ...sess.answers },
+        flagged: { ...sess.flagged },
+        correctCount,
+        total,
+        percentage,
+        scaledScore,
+        passed,
+        partStats,
+        elapsedSeconds,
+        newlyAddedMistakes,
+        isOfficialFull: sess.isOfficialFull
+      };
+
+      state.history.unshift({
+        date: new Date().toLocaleDateString('zh-TW'),
+        title: sess.title,
+        correctCount,
+        total,
+        scaledScore,
+        passed
+      });
+      if (state.history.length > 15) state.history.length = 15;
+      saveHistory();
+
+      state.lastReport = report;
+      state.reportFilter = 'all';
+      state.session = null;
+      state.route = 'report';
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ============================================================================
+       8. GEMINI API INFINITE PRACTICE GENERATOR (WITH STRICT JSON VALIDATION)
+       ============================================================================ */
+    async function generateAIQuestions() {
+      if (state.aiLoading) return;
+      state.aiLoading = true;
+      state.aiError = null;
+      renderApp();
+
+      const part = Number(state.aiConfig.part) || 1;
+      const theme = state.aiConfig.theme;
+
+      const partSpec = part === 1
+        ? 'Generate 5 standalone GEPT Intermediate (CEFR B1) Part 1 Vocabulary & Structure multiple-choice questions. Set passage to null.'
+        : part === 2
+          ? 'Generate 1 GEPT Intermediate (CEFR B1) Part 2 Cloze passage (150-190 words) with 5 numbered blanks written literally as [[1]], [[2]], [[3]], [[4]], [[5]] inside the passage text, and 5 corresponding multiple-choice questions (blankNumber 1 to 5).'
+          : 'Generate 1 GEPT Intermediate (CEFR B1) Part 3 Reading Comprehension passage (180-230 words, realistic article/email/notice) and 3 multiple-choice comprehension questions testing main idea, detail, and inference.';
+
+      const systemPrompt = `You are an expert test writer for Taiwan's GEPT Intermediate (全民英檢中級, CEFR B1) Reading Test.
+Output ONLY valid JSON matching the schema. Every question must have 4 plausible options, an exact 0-based "correct" integer (0, 1, 2, or 3), a clear bilingual explanation (English + Traditional Chinese 繁體中文), and 1-2 useful B1 vocabulary entries.`;
+
+      const userQuery = `Theme: ${theme}.
+Task: ${partSpec}
+Ensure strict grammatical accuracy and authentic Taiwan GEPT Intermediate difficulty.`;
+
+      const apiKey = (typeof window !== 'undefined' && window.GEMINI_API_KEY) ? window.GEMINI_API_KEY : '';
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              passageTitle: { type: 'STRING' },
+              passageText: { type: 'STRING' },
+              questions: {
+                type: 'ARRAY',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    blankNumber: { type: 'INTEGER' },
+                    stem: { type: 'STRING' },
+                    options: { type: 'ARRAY', items: { type: 'STRING' } },
+                    correct: { type: 'INTEGER' },
+                    explanation: { type: 'STRING' },
+                    vocab: {
+                      type: 'ARRAY',
+                      items: {
+                        type: 'OBJECT',
+                        properties: {
+                          word: { type: 'STRING' },
+                          pos: { type: 'STRING' },
+                          zh: { type: 'STRING' },
+                          example: { type: 'STRING' }
+                        },
+                        required: ['word', 'pos', 'zh', 'example']
+                      }
+                    }
+                  },
+                  required: ['stem', 'options', 'correct', 'explanation', 'vocab']
+                }
+              }
+            },
+            required: ['questions']
+          }
+        }
+      };
+
+      const maxRetries = 3;
+      let lastErr = null;
+
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            const errText = await response.text().catch(() => '');
+            throw new Error(`HTTP ${response.status}: ${errText.slice(0, 140) || 'API 請求失敗'}`);
+          }
+
+          const data = await response.json();
+          const rawJsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!rawJsonText) {
+            throw new Error('AI 回傳內容為空，請重試。');
+          }
+
+          const parsed = JSON.parse(rawJsonText);
+          if (!parsed || !Array.isArray(parsed.questions) || parsed.questions.length === 0) {
+            throw new Error('AI 題目格式驗證失敗，請重新產生。');
+          }
+
+          const batchId = `ai_${Date.now()}`;
+          const hasPassage = (part === 2 || part === 3) && parsed.passageText && parsed.passageText.trim().length > 20;
+          const passageObj = hasPassage ? {
+            id: batchId,
+            part,
+            title: parsed.passageTitle || `AI Generated ${theme}`,
+            subtitle: `AI 智慧生成題組 • ${theme}`,
+            content: parsed.passageText.trim()
+          } : null;
+
+          const normalizedQuestions = parsed.questions.map((q, idx) => {
+            const opts = Array.isArray(q.options) && q.options.length === 4
+              ? q.options.map(o => String(o))
+              : ['Option A', 'Option B', 'Option C', 'Option D'];
+            const corr = Number.isInteger(q.correct) && q.correct >= 0 && q.correct <= 3 ? q.correct : 0;
+            return {
+              id: `${batchId}_q${idx + 1}`,
+              part,
+              passageId: passageObj ? passageObj.id : null,
+              blankNumber: part === 2 ? (q.blankNumber || idx + 1) : null,
+              stem: String(q.stem || `Question ${idx + 1}`),
+              options: opts,
+              correct: corr,
+              explanation: String(q.explanation || 'AI 生成解析'),
+              vocab: Array.isArray(q.vocab) ? q.vocab : []
+            };
+          });
+
+          state.aiGeneratedSet = {
+            part,
+            theme,
+            passage: passageObj,
+            questions: normalizedQuestions
+          };
+          state.aiLoading = false;
+          state.aiError = null;
+          renderApp();
+          showToast(`成功生成 ${normalizedQuestions.length} 題 GEPT 中級題組！`, 'success');
+          return;
+        } catch (err) {
+          lastErr = err;
+          if (attempt < maxRetries - 1) {
+            await new Promise(res => setTimeout(res, 1000 * Math.pow(2, attempt)));
+          }
+        }
+      }
+
+      state.aiLoading = false;
+      state.aiError = `無法連線至 Gemini AI 服務（${lastErr ? lastErr.message : '網路或金鑰限制'}）。您仍可隨時使用內建 40 題全真模擬題庫進行練習！`;
+      renderApp();
+    }
+
+    /* ============================================================================
+       9. PASSAGE RENDERING WITH INTERACTIVE CLOZE CHIPS
+       ============================================================================ */
+    function renderFormattedPassage(passage, activeBlankNumber, revealedMap, answersMap, questionsList) {
+      if (!passage) return '';
+      const fontSizeClass = state.passageFontSize === 'sm'
+        ? 'text-sm sm:text-[15px]'
+        : state.passageFontSize === 'lg'
+          ? 'text-lg sm:text-[19px]'
+          : 'text-base sm:text-[17px]';
+
+      const paragraphs = passage.content.split(/\n\n+/);
+      const htmlParagraphs = paragraphs.map(para => {
+        let escaped = escapeHtml(para).replace(/\n/g, '<br>');
+        // Replace [[16]]..[[25]] or [[1]]..[[5]] with interactive blank buttons
+        escaped = escaped.replace(/\[\[(\d+)\]\]/g, (_, numStr) => {
+          const blankNum = Number(numStr);
+          const qObj = (questionsList || []).find(q => Number(q.blankNumber) === blankNum);
+          const isCurrent = Number(activeBlankNumber) === blankNum;
+          const userAns = qObj && answersMap ? answersMap[qObj.id] : undefined;
+          const isRevealed = qObj && revealedMap ? Boolean(revealedMap[qObj.id]) : false;
+
+          let labelText = `[ ${blankNum} ]`;
+          let chipStyle = 'bg-slate-100 text-slate-800 border-slate-300 hover:border-[#1E3A8A]';
+
+          if (userAns !== undefined && qObj && qObj.options[userAns]) {
+            labelText = `${blankNum}. ${escapeHtml(qObj.options[userAns])}`;
+            if (isRevealed) {
+              chipStyle = userAns === qObj.correct
+                ? 'bg-emerald-100 text-emerald-900 border-emerald-500 font-bold'
+                : 'bg-rose-100 text-rose-900 border-rose-500 font-bold line-through';
+            } else {
+              chipStyle = 'bg-[#1E3A8A]/10 text-[#1E3A8A] border-[#1E3A8A]/40 font-semibold';
+            }
+          }
+
+          if (isCurrent) {
+            chipStyle = 'bg-[#1E3A8A] text-white border-[#1E3A8A] font-bold shadow-xs ring-2 ring-[#1E3A8A]/25';
+          }
+
+          return `<button type="button" data-action="jump-blank" data-blank="${blankNum}" class="inline-flex items-center px-2.5 py-0.5 mx-0.5 rounded-lg border text-sm font-sans transition-all cursor-pointer align-baseline ${chipStyle}">${labelText}</button>`;
+        });
+
+        return `<p class="mb-4 last:mb-0">${escaped}</p>`;
+      }).join('');
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-7">
+          <div class="border-b border-slate-100 pb-3.5 mb-5">
+            <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A] bg-[#1E3A8A]/10 px-2.5 py-1 rounded-md mb-2">${escapeHtml(passage.subtitle || `Part ${passage.part} Reading Passage`)}</span>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">${escapeHtml(passage.title)}</h2>
+          </div>
+          <div class="passage-serif text-slate-800 ${fontSizeClass}">
+            ${htmlParagraphs}
+          </div>
+        </div>
+      `;
+    }
+
+    /* ============================================================================
+       10. VIEW RENDERERS (DASHBOARD, TEST RUNNER, SCORE REPORT, AI, VOCAB, MISTAKES)
+       ============================================================================ */
+    function renderDashboardView() {
+      const recentHtml = state.history.length > 0
+        ? `
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-slate-900 text-base">最近測驗紀錄</h3>
+              <span class="text-xs text-slate-500">及格標準：72 / 120 分</span>
+            </div>
+            <div class="divide-y divide-slate-100">
+              ${state.history.slice(0, 5).map(item => `
+                <div class="py-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+                  <div>
+                    <span class="font-semibold text-slate-800">${escapeHtml(item.title)}</span>
+                    <span class="text-xs text-slate-400 ml-2">${escapeHtml(item.date)}</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-xs font-medium text-slate-600">答對 ${item.correctCount}/${item.total}</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${item.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                      換算 ${item.scaledScore} 分 ${item.passed ? '✓ 通過' : '繼續加油'}
+                    </span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `
+        : '';
+
+      return `
+        <div class="space-y-8">
+          <!-- Hero Banner -->
+          <section class="bg-gradient-to-br from-[#1E3A8A] via-[#1E3A8A] to-[#172554] rounded-3xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
+            <div class="max-w-3xl relative z-10">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-bold tracking-wide mb-4">
+                <span>GEPT INTERMEDIATE • CEFR B1</span>
+                <span>•</span>
+                <span>全民英檢中級閱讀</span>
+              </div>
+              <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                全民英檢中級閱讀能力測驗<br class="hidden sm:inline" />全真模擬與 AI 智慧備戰平台
+              </h1>
+              <p class="mt-3 text-sm sm:text-base text-blue-100 leading-relaxed max-w-2xl">
+                完整收錄官方三大題型（詞彙和結構 15 題、段落填空 10 題、閱讀理解 15 題），具備 45 分鐘模擬計時器、雙語逐題詳解、120 分制換算分析、單字翻轉記憶卡與 AI 無限出題引擎。
+              </p>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button type="button" data-action="start-full-mock" class="px-6 py-3.5 rounded-2xl bg-white text-[#1E3A8A] font-extrabold text-sm sm:text-base shadow-md hover:bg-blue-50 transition-all flex items-center gap-2 cursor-pointer">
+                  <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>開始 40 題全真模擬考 (45 分鐘)</span>
+                </button>
+                <button type="button" data-action="navigate" data-route="ai-generator" class="px-5 py-3.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-sm border border-white/25 transition-all cursor-pointer">
+                  ⚡ AI 智慧生成新題組
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Part-by-Part Practice Section -->
+          <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 class="text-xl font-extrabold text-slate-900">分項題型強化練習 (Part 1 – Part 3)</h2>
+                <p class="text-xs sm:text-sm text-slate-500">針對弱點題型單獨訓練，可自由切換「即時解析模式」或「模擬計時模式」</p>
+              </div>
+              <!-- Instant Feedback Toggle Switch -->
+              <div class="inline-flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-2xs self-start">
+                <button type="button" data-action="set-practice-mode" data-instant="true" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${state.practiceInstantMode ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'}">
+                  即時解析模式
+                </button>
+                <button type="button" data-action="set-practice-mode" data-instant="false" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${!state.practiceInstantMode ? 'bg-[#1E3A8A] text-white' : 'text-slate-600 hover:text-slate-900'}">
+                  模擬計時模式
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <!-- Part 1 Card -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs hover:border-[#1E3A8A]/40 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-blue-50 text-[#1E3A8A]">PART 1 • Q1–15</span>
+                    <span class="text-xs font-semibold text-slate-400">15 題 • 建議 12 分鐘</span>
+                  </div>
+                  <h3 class="text-lg font-extrabold text-slate-900">詞彙和結構</h3>
+                  <p class="text-xs text-slate-500 font-medium mb-2">Vocabulary & Structure</p>
+                  <p class="text-sm text-slate-600 leading-relaxed">
+                    評量中級核心字彙、片語搭配、分詞構句、假設語氣與關係子句等關鍵文法結構。
+                  </p>
+                </div>
+                <button type="button" data-action="start-part" data-part="1" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#1E3A8A] text-white text-sm font-bold transition-colors cursor-pointer">
+                  練習第一部分 (15 題) →
+                </button>
+              </div>
+
+              <!-- Part 2 Card -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs hover:border-[#1E3A8A]/40 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-amber-50 text-amber-800">PART 2 • Q16–25</span>
+                    <span class="text-xs font-semibold text-slate-400">2 篇 10 題 • 建議 12 分鐘</span>
+                  </div>
+                  <h3 class="text-lg font-extrabold text-slate-900">段落填空 (克漏字)</h3>
+                  <p class="text-xs text-slate-500 font-medium mb-2">Cloze Passages</p>
+                  <p class="text-sm text-slate-600 leading-relaxed">
+                    收錄「都市垂直農業」與「生理時鐘與輪班工作」兩篇短文，支援文內點擊空格編號即時跳題。
+                  </p>
+                </div>
+                <button type="button" data-action="start-part" data-part="2" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#1E3A8A] text-white text-sm font-bold transition-colors cursor-pointer">
+                  練習第二部分 (10 題) →
+                </button>
+              </div>
+
+              <!-- Part 3 Card -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs hover:border-[#1E3A8A]/40 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-emerald-50 text-emerald-800">PART 3 • Q26–40</span>
+                    <span class="text-xs font-semibold text-slate-400">5 篇 15 題 • 建議 21 分鐘</span>
+                  </div>
+                  <h3 class="text-lg font-extrabold text-slate-900">閱讀理解</h3>
+                  <p class="text-xs text-slate-500 font-medium mb-2">Reading Comprehension</p>
+                  <p class="text-sm text-slate-600 leading-relaxed">
+                    涵蓋創客工坊公告、商業物流信件、微休息研究、水溶性電子與海洋藍碳等五大多元文本。
+                  </p>
+                </div>
+                <button type="button" data-action="start-part" data-part="3" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#1E3A8A] text-white text-sm font-bold transition-colors cursor-pointer">
+                  練習第三部分 (15 題) →
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Study Tools Quick Access -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 flex items-center justify-between gap-4">
+              <div>
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">單字記憶庫</span>
+                <h3 class="text-base font-extrabold text-slate-900 mt-1.5">中級核心單字翻轉卡 (${state.vocabDeck.length} 字)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">支援真人美式發音朗讀、詞性例句與熟練度篩選</p>
+              </div>
+              <button type="button" data-action="navigate" data-route="vocab" class="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer">
+                開啟單字卡
+              </button>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 flex items-center justify-between gap-4">
+              <div>
+                <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full">錯題追蹤</span>
+                <h3 class="text-base font-extrabold text-slate-900 mt-1.5">個人專屬錯題本 (${state.mistakes.length} 題)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">自動收錄測驗答錯題目，一鍵啟動錯題重練特訓</p>
+              </div>
+              <button type="button" data-action="navigate" data-route="mistakes" class="shrink-0 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer">
+                檢視錯題本
+              </button>
+            </div>
+          </section>
+
+          ${recentHtml}
+        </div>
+      `;
+    }
+
+    function renderTestRunnerView() {
+      const sess = state.session;
+      if (!sess) return renderDashboardView();
+
+      const total = sess.questions.length;
+      const idx = sess.currentIndex;
+      const q = sess.questions[idx];
+      const passage = q.passageId ? sess.passageMap[q.passageId] : null;
+      const userAns = sess.answers[q.id];
+      const isRevealed = sess.instantFeedback && Boolean(sess.revealed[q.id]);
+      const isFlagged = Boolean(sess.flagged[q.id]);
+      const answeredCount = sess.questions.filter(item => sess.answers[item.id] !== undefined).length;
+      const letters = ['A', 'B', 'C', 'D'];
+
+      // Part Quick-Jump Tabs (if multiple parts exist)
+      const partsPresent = [1, 2, 3].filter(p => sess.questions.some(item => item.part === p));
+      const partTabsHtml = partsPresent.length > 1
+        ? `<div class="flex items-center gap-1.5">
+            ${partsPresent.map(p => {
+              const active = q.part === p;
+              return `<button type="button" data-action="jump-part" data-part="${p}" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${active ? 'bg-[#1E3A8A] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">Part ${p}</button>`;
+            }).join('')}
+          </div>`
+        : '';
+
+      // Question Navigator Grid
+      const gridButtonsHtml = sess.questions.map((item, i) => {
+        const isCurrent = i === idx;
+        const ans = sess.answers[item.id];
+        const flag = Boolean(sess.flagged[item.id]);
+        const rev = sess.instantFeedback && Boolean(sess.revealed[item.id]);
+
+        let cls = 'bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-400';
+        if (rev) {
+          cls = ans === item.correct
+            ? 'bg-emerald-600 text-white border-emerald-600'
+            : 'bg-rose-600 text-white border-rose-600';
+        } else if (ans !== undefined) {
+          cls = 'bg-[#1E3A8A]/15 text-[#1E3A8A] border-[#1E3A8A]/40 font-bold';
+        }
+        if (isCurrent) {
+          cls += ' ring-2 ring-[#1E3A8A] ring-offset-1 font-extrabold';
+        }
+
+        const displayNum = item.blankNumber || (typeof item.id === 'number' ? item.id : i + 1);
+        return `
+          <button type="button" data-action="jump-index" data-index="${i}" class="relative h-9 rounded-lg border text-xs transition-all flex items-center justify-center cursor-pointer ${cls}">
+            <span>${displayNum}</span>
+            ${flag ? '<span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-500 border border-white"></span>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      // Options Rendering
+      const optionsHtml = q.options.map((optText, optIdx) => {
+        const selected = userAns === optIdx;
+        let cardCls = 'border-slate-200 bg-white hover:border-[#1E3A8A]/50 hover:bg-slate-50';
+        let badgeCls = 'bg-slate-100 text-slate-700';
+        let statusTag = '';
+
+        if (isRevealed) {
+          if (optIdx === q.correct) {
+            cardCls = 'border-emerald-500 bg-emerald-50/80 text-emerald-950';
+            badgeCls = 'bg-emerald-600 text-white';
+            statusTag = '<span class="text-xs font-extrabold text-emerald-700 ml-auto">✓ 正確答案</span>';
+          } else if (selected) {
+            cardCls = 'border-rose-500 bg-rose-50/80 text-rose-950';
+            badgeCls = 'bg-rose-600 text-white';
+            statusTag = '<span class="text-xs font-extrabold text-rose-700 ml-auto">✗ 您的選擇</span>';
+          } else {
+            cardCls = 'border-slate-200 bg-slate-50/60 opacity-70';
+          }
+        } else if (selected) {
+          cardCls = 'border-[#1E3A8A] bg-[#1E3A8A]/5 text-slate-900 shadow-2xs';
+          badgeCls = 'bg-[#1E3A8A] text-white';
+        }
+
+        return `
+          <button type="button" data-action="select-option" data-option="${optIdx}" ${isRevealed ? 'disabled' : ''} class="w-full text-left p-3.5 sm:p-4 rounded-xl border-2 transition-all flex items-center gap-3.5 ${isRevealed ? 'cursor-default' : 'cursor-pointer'} ${cardCls}">
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-extrabold shrink-0 transition-colors ${badgeCls}">
+              ${letters[optIdx]}
+            </span>
+            <span class="text-sm sm:text-base font-medium leading-snug">${escapeHtml(optText)}</span>
+            ${statusTag}
+          </button>
+        `;
+      }).join('');
+
+      // Instant Feedback Explanation Drawer
+      const instantExplanationHtml = isRevealed
+        ? `
+          <div class="mt-6 rounded-2xl border ${userAns === q.correct ? 'border-emerald-200 bg-emerald-50/70' : 'border-amber-200 bg-amber-50/70'} p-5 space-y-3">
+            <div class="flex items-center gap-2 font-extrabold text-sm ${userAns === q.correct ? 'text-emerald-800' : 'text-amber-900'}">
+              <span>${userAns === q.correct ? '🎉 答對了！解析如下：' : '💡 解析與重點提示：'}</span>
+            </div>
+            <p class="text-sm text-slate-800 whitespace-pre-line leading-relaxed">${escapeHtml(q.explanation)}</p>
+            ${(q.vocab && q.vocab.length > 0) ? `
+              <div class="pt-2 border-t border-slate-200/70 flex flex-wrap gap-2">
+                ${q.vocab.map((v, vIdx) => `
+                  <button type="button" data-action="save-question-vocab" data-vidx="${vIdx}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#1E3A8A] text-xs font-bold text-slate-800 shadow-2xs cursor-pointer">
+                    <span class="text-[#1E3A8A]">+ 單字卡</span>
+                    <span>${escapeHtml(v.word)}</span>
+                    <span class="text-slate-500 font-normal">(${escapeHtml(v.zh)})</span>
+                  </button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `
+        : '';
+
+      const questionCardHtml = `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-7 flex flex-col justify-between">
+          <div>
+            <!-- Question Header Meta -->
+            <div class="flex items-center justify-between gap-2 pb-4 mb-5 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#1E3A8A] text-white text-xs font-extrabold">
+                  第 ${idx + 1} / ${total} 題
+                </span>
+                <span class="text-xs font-semibold text-slate-500">
+                  Part ${q.part} ${q.blankNumber ? `• 空格 [${q.blankNumber}]` : ''}
+                </span>
+              </div>
+              <button type="button" data-action="toggle-flag" class="px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${isFlagged ? 'bg-amber-50 border-amber-400 text-amber-800' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}">
+                <span>${isFlagged ? '🚩 已標記複查' : '🏳️ 標記此題'}</span>
+              </button>
+            </div>
+
+            <!-- Question Stem -->
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed mb-5">
+              ${escapeHtml(q.stem)}
+            </h3>
+
+            <!-- 4 Choices -->
+            <div class="space-y-3">
+              ${optionsHtml}
+            </div>
+
+            ${instantExplanationHtml}
+          </div>
+
+          <!-- Bottom Prev / Next Controls -->
+          <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <button type="button" data-action="prev-question" ${idx === 0 ? 'disabled' : ''} class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
+              ← 上一題
+            </button>
+
+            <span class="hidden sm:inline text-xs text-slate-400">
+              快捷鍵：1–4 / A–D 作答 • ←/→ 換題 • F 標記
+            </span>
+
+            ${idx < total - 1
+              ? `<button type="button" data-action="next-question" class="px-5 py-2.5 rounded-xl bg-[#1E3A8A] hover:bg-[#2B4F9E] text-white text-sm font-bold transition-colors cursor-pointer">
+                  下一題 →
+                </button>`
+              : `<button type="button" data-action="submit-test" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-xs transition-colors cursor-pointer">
+                  完成並交卷 ✓
+                </button>`
+            }
+          </div>
+        </div>
+      `;
+
+      return `
+        <div class="space-y-5">
+          <!-- Sticky Test Control Bar -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-3.5 sm:px-5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <button type="button" data-action="go-home" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer">
+                ← 離開測驗
+              </button>
+              <div>
+                <h2 class="text-sm sm:text-base font-extrabold text-slate-900">${escapeHtml(sess.title)}</h2>
+                <p class="text-[11px] text-slate-500">已作答 ${answeredCount} / ${total} 題 • ${sess.instantFeedback ? '即時解析模式' : '正式模擬考模式'}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+              ${partTabsHtml}
+
+              <!-- Passage Font Size Switcher -->
+              <div class="hidden md:inline-flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200" title="文章字體大小">
+                <button type="button" data-action="set-font" data-size="sm" class="px-2 py-1 rounded-lg text-xs font-bold cursor-pointer ${state.passageFontSize === 'sm' ? 'bg-white text-[#1E3A8A] shadow-2xs' : 'text-slate-600'}">A-</button>
+                <button type="button" data-action="set-font" data-size="base" class="px-2 py-1 rounded-lg text-xs font-bold cursor-pointer ${state.passageFontSize === 'base' ? 'bg-white text-[#1E3A8A] shadow-2xs' : 'text-slate-600'}">A</button>
+                <button type="button" data-action="set-font" data-size="lg" class="px-2 py-1 rounded-lg text-xs font-bold cursor-pointer ${state.passageFontSize === 'lg' ? 'bg-white text-[#1E3A8A] shadow-2xs' : 'text-slate-600'}">A+</button>
+              </div>
+
+              <!-- Timer -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="test-timer-display" class="font-mono text-sm sm:text-base font-extrabold ${sess.secondsLeft <= 300 ? 'text-rose-600 timer-urgent' : 'text-[#1E3A8A]'}">
+                  ${formatTime(sess.secondsLeft)}
+                </span>
+                ${!sess.isOfficialFull ? `
+                  <button type="button" data-action="toggle-pause" class="ml-1 text-[11px] font-bold px-1.5 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 cursor-pointer">
+                    ${sess.paused ? '繼續' : '暫停'}
+                  </button>
+                ` : ''}
+              </div>
+
+              <!-- Mobile Grid Toggle -->
+              <button type="button" data-action="toggle-drawer" class="lg:hidden px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer">
+                題號卡 (${answeredCount}/${total})
+              </button>
+
+              <!-- Submit Button -->
+              <button type="button" data-action="submit-test" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold shadow-2xs transition-colors cursor-pointer">
+                交卷
+              </button>
+            </div>
+          </div>
+
+          <!-- Paused Overlay Notice -->
+          ${sess.paused ? `
+            <div class="bg-amber-50 border border-amber-300 rounded-2xl p-4 flex items-center justify-between">
+              <span class="text-sm font-bold text-amber-900">⏸ 計時器已暫停，點擊右側按鈕恢復練習。</span>
+              <button type="button" data-action="toggle-pause" class="px-4 py-1.5 rounded-xl bg-amber-600 text-white text-xs font-bold cursor-pointer">繼續計時</button>
+            </div>
+          ` : ''}
+
+          <!-- Main Split-Pane Workspace + Navigator Sidebar -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            ${passage ? `
+              <!-- Left Sticky Passage Pane (Parts 2 & 3) -->
+              <div class="lg:col-span-6 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto custom-scrollbar">
+                ${renderFormattedPassage(passage, q.blankNumber, sess.revealed, sess.answers, sess.questions)}
+              </div>
+              <!-- Right Question Pane -->
+              <div class="lg:col-span-4">
+                ${questionCardHtml}
+              </div>
+            ` : `
+              <!-- Standalone Question Pane (Part 1) -->
+              <div class="lg:col-span-9">
+                ${questionCardHtml}
+              </div>
+            `}
+
+            <!-- Question Navigator Card (Desktop Sidebar / Mobile Expandable) -->
+            <aside class="${passage ? 'lg:col-span-2' : 'lg:col-span-3'} ${state.drawerOpen ? 'block' : 'hidden lg:block'} bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs lg:sticky lg:top-20">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">作答題號總覽</h4>
+                <span class="text-xs font-bold text-[#1E3A8A]">${answeredCount}/${total}</span>
+              </div>
+              <div class="grid ${passage ? 'grid-cols-5 lg:grid-cols-4' : 'grid-cols-5'} gap-1.5 max-h-80 overflow-y-auto custom-scrollbar pr-0.5">
+                ${gridButtonsHtml}
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-1.5 text-[11px] text-slate-500">
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#1E3A8A]/20 border border-[#1E3A8A]"></span>已作答</div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-slate-100 border border-slate-300"></span>未作答</div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>已標記</div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderScoreReportView() {
+      const rep = state.lastReport;
+      if (!rep) return renderDashboardView();
+
+      const letters = ['A', 'B', 'C', 'D'];
+      const filteredQuestions = rep.questions.filter(q => {
+        if (state.reportFilter === 'wrong') return rep.answers[q.id] !== q.correct;
+        if (state.reportFilter === 'flagged') return Boolean(rep.flagged[q.id]);
+        return true;
+      });
+
+      const partBarsHtml = [1, 2, 3].filter(p => rep.partStats[p].total > 0).map(p => {
+        const st = rep.partStats[p];
+        const pct = Math.round((st.correct / st.total) * 100);
+        const names = { 1: 'Part 1 詞彙和結構', 2: 'Part 2 段落填空', 3: 'Part 3 閱讀理解' };
+        return `
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+            <div class="flex items-center justify-between text-xs font-bold mb-2">
+              <span class="text-slate-800">${names[p]}</span>
+              <span class="text-[#1E3A8A]">${st.correct} / ${st.total} (${pct}%)</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full rounded-full ${pct >= 60 ? 'bg-emerald-600' : 'bg-amber-500'}" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const reviewListHtml = filteredQuestions.length === 0
+        ? `<div class="bg-white rounded-2xl border border-slate-200 p-10 text-center text-slate-500 text-sm">此篩選條件下沒有題目。</div>`
+        : filteredQuestions.map(q => {
+            const globalIdx = rep.questions.findIndex(item => item.id === q.id);
+            const userAns = rep.answers[q.id];
+            const isCorrect = userAns === q.correct;
+            const passage = q.passageId ? rep.passageMap[q.passageId] : null;
+
+            return `
+              <article class="bg-white rounded-2xl border ${isCorrect ? 'border-slate-200' : 'border-rose-200'} p-5 sm:p-6 shadow-2xs space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                      ${isCorrect ? '✓ 正確' : '✗ 錯誤'} • 第 ${globalIdx + 1} 題 (Part ${q.part})
+                    </span>
+                    ${rep.flagged[q.id] ? '<span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">🚩 已標記</span>' : ''}
+                  </div>
+                  <span class="text-xs text-slate-500">
+                    您的作答：<strong>${userAns !== undefined ? letters[userAns] : '未作答'}</strong> ｜ 正確答案：<strong class="text-emerald-700">${letters[q.correct]}</strong>
+                  </span>
+                </div>
+
+                ${passage ? `
+                  <details class="bg-slate-50 rounded-xl border border-slate-200 p-3.5 text-xs">
+                    <summary class="font-bold text-[#1E3A8A] cursor-pointer">展開閱讀原文：${escapeHtml(passage.title)}</summary>
+                    <div class="mt-3 pt-3 border-t border-slate-200 passage-serif text-sm text-slate-700 whitespace-pre-line leading-relaxed">
+                      ${escapeHtml(passage.content)}
+                    </div>
+                  </details>
+                ` : ''}
+
+                <p class="text-base font-bold text-slate-900">${escapeHtml(q.stem)}</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  ${q.options.map((opt, oIdx) => {
+                    let cls = 'border-slate-200 bg-slate-50 text-slate-700';
+                    if (oIdx === q.correct) cls = 'border-emerald-500 bg-emerald-50 text-emerald-950 font-bold';
+                    else if (oIdx === userAns) cls = 'border-rose-400 bg-rose-50 text-rose-900 line-through';
+                    return `<div class="px-3.5 py-2.5 rounded-xl border text-sm flex items-center gap-2 ${cls}">
+                      <span class="font-extrabold">${letters[oIdx]}.</span>
+                      <span>${escapeHtml(opt)}</span>
+                    </div>`;
+                  }).join('')}
+                </div>
+
+                <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-4 space-y-2.5">
+                  <p class="text-xs font-extrabold text-[#1E3A8A]">雙語詳細解析</p>
+                  <p class="text-sm text-slate-800 whitespace-pre-line leading-relaxed">${escapeHtml(q.explanation)}</p>
+                  ${(q.vocab && q.vocab.length > 0) ? `
+                    <div class="pt-2 flex flex-wrap gap-2">
+                      ${q.vocab.map((v, vIdx) => `
+                        <button type="button" data-action="save-report-vocab" data-qid="${escapeHtml(String(q.id))}" data-vidx="${vIdx}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#1E3A8A] text-xs font-bold text-slate-800 cursor-pointer">
+                          <span class="text-[#1E3A8A]">+ 加入單字卡</span>
+                          <span>${escapeHtml(v.word)}</span>
+                          <span class="text-slate-500 font-normal">(${escapeHtml(v.zh)})</span>
+                        </button>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              </article>
+            `;
+          }).join('');
+
+      return `
+        <div class="space-y-7">
+          <!-- Score Summary Banner -->
+          <section class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold ${rep.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} mb-3">
+                  <span>${rep.passed ? '🎉 恭喜達成中級通過標準 (≥ 72 分)' : '📈 尚未達 72 分標準，建議複習錯題後再戰'}</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">${escapeHtml(rep.title)} — 成績分析報告</h1>
+                <p class="text-sm text-slate-500 mt-1">
+                  作答耗時：${formatTime(rep.elapsedSeconds)} • 答對題數：${rep.correctCount} / ${rep.total} 題 (${rep.percentage}%)
+                  ${rep.newlyAddedMistakes > 0 ? `• 已自動將 ${rep.newlyAddedMistakes} 題錯題收錄至錯題本` : ''}
+                </p>
+              </div>
+
+              <!-- Scaled Score Card -->
+              <div class="flex items-center gap-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 shrink-0">
+                <div class="text-center">
+                  <div class="text-xs font-bold text-slate-500">GEPT 換算級分</div>
+                  <div class="text-4xl font-extrabold ${rep.passed ? 'text-emerald-600' : 'text-[#1E3A8A]'} mt-1">
+                    ${rep.scaledScore}<span class="text-base font-bold text-slate-400"> / 120</span>
+                  </div>
+                  <div class="text-[11px] font-semibold text-slate-500 mt-1">及格門檻：72 分</div>
+                </div>
+                <div class="h-14 w-px bg-slate-200"></div>
+                <div class="flex flex-col gap-2">
+                  <button type="button" data-action="start-full-mock" class="px-4 py-2 rounded-xl bg-[#1E3A8A] hover:bg-[#2B4F9E] text-white text-xs font-bold cursor-pointer">
+                    再測一次全真模擬
+                  </button>
+                  <button type="button" data-action="navigate" data-route="mistakes" class="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold cursor-pointer">
+                    前往錯題本 (${state.mistakes.length})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Part Breakdown -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              ${partBarsHtml}
+            </div>
+          </section>
+
+          <!-- Filterable Review Header -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="text-lg font-extrabold text-slate-900">逐題詳解與解析檢視</h2>
+            <div class="inline-flex bg-white border border-slate-200 rounded-xl p-1">
+              <button type="button" data-action="set-report-filter" data-filter="all" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.reportFilter === 'all' ? 'bg-[#1E3A8A] text-white' : 'text-slate-600'}">
+                全部題目 (${rep.questions.length})
+              </button>
+              <button type="button" data-action="set-report-filter" data-filter="wrong" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.reportFilter === 'wrong' ? 'bg-rose-600 text-white' : 'text-slate-600'}">
+                僅看錯題 (${rep.total - rep.correctCount})
+              </button>
+              <button type="button" data-action="set-report-filter" data-filter="flagged" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.reportFilter === 'flagged' ? 'bg-amber-600 text-white' : 'text-slate-600'}">
+                已標記題目 (${Object.keys(rep.flagged).length})
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            ${reviewListHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAIGeneratorView() {
+      const themes = [
+        'Daily Life & Travel (日常生活與旅遊)',
+        'Workplace & Business (職場與商業)',
+        'Science & Tech (科學與新興科技)',
+        'Environment & Nature (環境保護與自然生態)',
+        'Health & Lifestyle (健康醫療與生活型態)',
+        'Culture & Society (文化教育與社會趨勢)'
+      ];
+
+      const genSet = state.aiGeneratedSet;
+
+      return `
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+            <div class="flex items-center gap-2 text-xs font-extrabold text-amber-700 bg-amber-50 px-3 py-1 rounded-full w-fit mb-3">
+              <span>⚡ GEMINI AI 智慧命題引擎</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">AI 無限生成 GEPT 中級閱讀題組</h1>
+            <p class="text-sm text-slate-600 mt-1.5 leading-relaxed">
+              選擇欲練習的測驗題型與文章主題，AI 將即時撰寫符合全民英檢中級（CEFR B1）難度的全新試題、雙語詳解與核心單字，並可直接匯入測驗引擎練習。
+            </p>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="ai-part-select" class="block text-xs font-extrabold text-slate-700 mb-1.5">選擇題型 (Part)</label>
+                <select id="ai-part-select" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-800 focus:border-[#1E3A8A] focus:outline-none">
+                  <option value="1" ${Number(state.aiConfig.part) === 1 ? 'selected' : ''}>Part 1：詞彙和結構 (生成 5 題)</option>
+                  <option value="2" ${Number(state.aiConfig.part) === 2 ? 'selected' : ''}>Part 2：段落填空克漏字 (1 篇 5 題)</option>
+                  <option value="3" ${Number(state.aiConfig.part) === 3 ? 'selected' : ''}>Part 3：閱讀理解文章 (1 篇 3 題)</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="ai-theme-select" class="block text-xs font-extrabold text-slate-700 mb-1.5">選擇文章主題 (Theme)</label>
+                <select id="ai-theme-select" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-800 focus:border-[#1E3A8A] focus:outline-none">
+                  ${themes.map(t => `<option value="${escapeHtml(t)}" ${state.aiConfig.theme === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <button type="button" data-action="run-ai-generate" ${state.aiLoading ? 'disabled' : ''} class="px-6 py-3 rounded-2xl bg-[#1E3A8A] hover:bg-[#2B4F9E] disabled:opacity-60 text-white text-sm font-extrabold shadow-xs transition-all flex items-center gap-2 cursor-pointer">
+                ${state.aiLoading
+                  ? `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg><span>AI 正在命題與校對中...</span>`
+                  : `<span>✨ 立即生成全新題組</span>`
+                }
+              </button>
+            </div>
+
+            ${state.aiError ? `
+              <div class="mt-5 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 flex items-start justify-between gap-3">
+                <div>
+                  <p class="font-bold">AI 生成提示</p>
+                  <p class="mt-0.5 text-xs sm:text-sm">${escapeHtml(state.aiError)}</p>
+                </div>
+                <button type="button" data-action="start-full-mock" class="shrink-0 px-3 py-1.5 rounded-xl bg-rose-700 text-white text-xs font-bold cursor-pointer">
+                  改練內建 40 題
+                </button>
+              </div>
+            ` : ''}
+          </div>
+
+          ${genSet ? `
+            <div class="bg-white rounded-3xl border border-emerald-200 p-6 sm:p-8 shadow-xs space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">✓ 題組已就緒</span>
+                  <h2 class="text-xl font-extrabold text-slate-900 mt-1.5">
+                    ${genSet.passage ? escapeHtml(genSet.passage.title) : `AI 生成 Part ${genSet.part} 練習題組`}
+                  </h2>
+                  <p class="text-xs text-slate-500 mt-0.5">主題：${escapeHtml(genSet.theme)} • 共 ${genSet.questions.length} 題</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" data-action="start-ai-test" data-instant="true" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold cursor-pointer">
+                    即時解析練習 →
+                  </button>
+                  <button type="button" data-action="start-ai-test" data-instant="false" class="px-4 py-2.5 rounded-xl bg-[#1E3A8A] hover:bg-[#2B4F9E] text-white text-xs sm:text-sm font-extrabold cursor-pointer">
+                    模擬計時測驗 →
+                  </button>
+                </div>
+              </div>
+
+              ${genSet.passage ? `
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-sm passage-serif text-slate-700 line-clamp-4">
+                  ${escapeHtml(genSet.passage.content)}
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderVocabView() {
+      const filtered = state.vocabDeck.filter(v => {
+        if (state.vocabFilter === 'mastered') return Boolean(v.mastered);
+        if (state.vocabFilter === 'review') return !v.mastered;
+        return true;
+      });
+
+      if (state.flashcardIndex >= filtered.length) {
+        state.flashcardIndex = Math.max(0, filtered.length - 1);
+      }
+
+      const currentCard = filtered[state.flashcardIndex] || null;
+      const masteredCount = state.vocabDeck.filter(v => v.mastered).length;
+
+      return `
+        <div class="max-w-3xl mx-auto space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 class="text-2xl font-extrabold text-slate-900">GEPT 中級單字翻轉卡</h1>
+              <p class="text-xs sm:text-sm text-slate-500">已熟練 ${masteredCount} / ${state.vocabDeck.length} 字 • 點擊卡片翻面查看中文釋義與例句</p>
+            </div>
+            <div class="inline-flex bg-white border border-slate-200 rounded-xl p-1 self-start">
+              <button type="button" data-action="set-vocab-filter" data-filter="all" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.vocabFilter === 'all' ? 'bg-[#1E3A8A] text-white' : 'text-slate-600'}">
+                全部 (${state.vocabDeck.length})
+              </button>
+              <button type="button" data-action="set-vocab-filter" data-filter="review" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.vocabFilter === 'review' ? 'bg-amber-600 text-white' : 'text-slate-600'}">
+                待複習 (${state.vocabDeck.length - masteredCount})
+              </button>
+              <button type="button" data-action="set-vocab-filter" data-filter="mastered" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${state.vocabFilter === 'mastered' ? 'bg-emerald-600 text-white' : 'text-slate-600'}">
+                已熟練 (${masteredCount})
+              </button>
+            </div>
+          </div>
+
+          ${!currentCard ? `
+            <div class="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-3">
+              <p class="text-slate-600 font-bold">此分類下目前沒有單字卡</p>
+              <button type="button" data-action="set-vocab-filter" data-filter="all" class="px-4 py-2 rounded-xl bg-[#1E3A8A] text-white text-xs font-bold cursor-pointer">顯示全部單字</button>
+            </div>
+          ` : `
+            <!-- 3D Flip Flashcard -->
+            <div class="flashcard-scene">
+              <div data-action="flip-card" class="flashcard-inner cursor-pointer ${state.flashcardFlipped ? 'is-flipped' : ''}">
+                <!-- Front Face -->
+                <div class="flashcard-face bg-white border-2 border-slate-200 shadow-md p-8 flex flex-col items-center justify-between text-center">
+                  <div class="w-full flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">卡片 ${state.flashcardIndex + 1} / ${filtered.length}</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${currentCard.mastered ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                      ${currentCard.mastered ? '✓ 已熟練' : '待複習'}
+                    </span>
+                  </div>
+
+                  <div class="my-auto py-4">
+                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-blue-50 text-[#1E3A8A] text-xs font-extrabold mb-2">${escapeHtml(currentCard.pos)}</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">${escapeHtml(currentCard.word)}</h2>
+                    <button type="button" data-action="speak-card" data-word="${escapeHtml(currentCard.word)}" class="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer">
+                      <span>🔊 聆聽發音</span>
+                    </button>
+                  </div>
+
+                  <p class="text-xs text-slate-400">點擊卡片任意處翻面查看釋義 ↻</p>
+                </div>
+
+                <!-- Back Face -->
+                <div class="flashcard-face flashcard-back bg-gradient-to-br from-[#1E3A8A] to-[#172554] text-white shadow-md p-8 flex flex-col items-center justify-between text-center">
+                  <div class="w-full flex items-center justify-between text-xs text-blue-200">
+                    <span>${escapeHtml(currentCard.word)} (${escapeHtml(currentCard.pos)})</span>
+                    <span>背面釋義</span>
+                  </div>
+
+                  <div class="my-auto py-4 space-y-4 max-w-lg">
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">${escapeHtml(currentCard.zh)}</h3>
+                    ${currentCard.example ? `
+                      <div class="bg-white/10 rounded-2xl p-4 text-sm text-blue-50 italic leading-relaxed">
+                        “${escapeHtml(currentCard.example)}”
+                      </div>
+                    ` : ''}
+                  </div>
+
+                  <p class="text-xs text-blue-200">點擊卡片翻回正面 ↺</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flashcard Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200 p-4">
+              <button type="button" data-action="prev-card" ${state.flashcardIndex === 0 ? 'disabled' : ''} class="px-4 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer">
+                ← 上一張
+              </button>
+
+              <div class="flex items-center gap-2">
+                <button type="button" data-action="toggle-mastered" data-word="${escapeHtml(currentCard.word)}" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer ${currentCard.mastered ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-emerald-600 text-white hover:bg-emerald-700'}">
+                  ${currentCard.mastered ? '標記為待複習' : '✓ 標記為已熟練'}
+                </button>
+                <button type="button" data-action="delete-card" data-word="${escapeHtml(currentCard.word)}" class="px-3 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold cursor-pointer">
+                  移除
+                </button>
+              </div>
+
+              <button type="button" data-action="next-card" ${state.flashcardIndex >= filtered.length - 1 ? 'disabled' : ''} class="px-4 py-2 rounded-xl bg-[#1E3A8A] text-white text-xs sm:text-sm font-bold hover:bg-[#2B4F9E] disabled:opacity-40 cursor-pointer">
+                下一張 →
+              </button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderMistakesView() {
+      const letters = ['A', 'B', 'C', 'D'];
+      return `
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-extrabold text-slate-900">個人專屬錯題本 (${state.mistakes.length} 題)</h1>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">每次測驗答錯的題目皆會自動收錄於此，複習後可啟動錯題重練或移除已學會的題目。</p>
+            </div>
+            ${state.mistakes.length > 0 ? `
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" data-action="start-mistake-drill" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-extrabold shadow-2xs cursor-pointer">
+                  🔥 啟動錯題重練 (${state.mistakes.length} 題)
+                </button>
+                <button type="button" data-action="clear-mistakes" class="px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-bold cursor-pointer">
+                  清空全部
+                </button>
+              </div>
+            ` : ''}
+          </div>
+
+          ${state.mistakes.length === 0 ? `
+            <div class="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-4">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-2xl">✓</div>
+              <h2 class="text-lg font-extrabold text-slate-900">目前沒有任何錯題紀錄！</h2>
+              <p class="text-sm text-slate-500">進行全真模擬考或分項練習時，若遇答錯題目將會自動加入此處。</p>
+              <button type="button" data-action="start-full-mock" class="px-5 py-2.5 rounded-xl bg-[#1E3A8A] text-white text-sm font-bold cursor-pointer">
+                前往模擬測驗
+              </button>
+            </div>
+          ` : `
+            <div class="space-y-4">
+              ${state.mistakes.map((q, idx) => `
+                <article class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs space-y-3.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-extrabold">
+                      錯題 #${idx + 1} • Part ${q.part}
+                    </span>
+                    <button type="button" data-action="remove-mistake" data-qid="${escapeHtml(String(q.id))}" class="text-xs font-bold text-slate-500 hover:text-emerald-700 cursor-pointer">
+                      ✓ 已學會，移出錯題本
+                    </button>
+                  </div>
+
+                  <p class="text-base font-bold text-slate-900">${escapeHtml(q.stem)}</p>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${q.options.map((opt, oIdx) => `
+                      <div class="px-3.5 py-2 rounded-xl border text-sm ${oIdx === q.correct ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-bold' : 'border-slate-200 bg-slate-50 text-slate-600'}">
+                        <span class="font-extrabold mr-1.5">${letters[oIdx]}.</span>${escapeHtml(opt)}
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 text-sm text-slate-700 whitespace-pre-line leading-relaxed">
+                    ${escapeHtml(q.explanation)}
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    /* ============================================================================
+       11. MASTER RENDER LOOP
+       ============================================================================ */
+    function renderApp() {
+      updateHeaderBadges();
+      const root = document.getElementById('app-root');
+      if (!root) return;
+
+      switch (state.route) {
+        case 'test':
+          root.innerHTML = renderTestRunnerView();
+          break;
+        case 'report':
+          root.innerHTML = renderScoreReportView();
+          break;
+        case 'ai-generator':
+          root.innerHTML = renderAIGeneratorView();
+          break;
+        case 'vocab':
+          root.innerHTML = renderVocabView();
+          break;
+        case 'mistakes':
+          root.innerHTML = renderMistakesView();
+          break;
+        case 'dashboard':
+        default:
+          root.innerHTML = renderDashboardView();
+          break;
+      }
+    }
+
+    /* ============================================================================
+       12. GLOBAL EVENT DELEGATION & KEYBOARD SHORTCUTS
+       ============================================================================ */
+    function handleNavigate(targetRoute) {
+      if (state.route === 'test' && state.session) {
+        openModal({
+          title: '確定要離開目前的測驗嗎？',
+          bodyHtml: '<p>離開測驗將會遺失目前的作答進度，確定要返回嗎？</p>',
+          confirmLabel: '確定離開',
+          cancelLabel: '繼續作答',
+          confirmVariant: 'danger',
+          onConfirm: () => {
+            closeModal();
+            stopTimer();
+            state.session = null;
+            state.route = targetRoute;
+            renderApp();
+          }
+        });
+        return;
+      }
+      state.route = targetRoute;
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+
+      const action = btn.getAttribute('data-action');
+
+      switch (action) {
+        case 'modal-cancel':
+          closeModal();
+          break;
+        case 'modal-confirm':
+          if (typeof modalConfirmCallback === 'function') modalConfirmCallback();
+          else closeModal();
+          break;
+        case 'go-home':
+          handleNavigate('dashboard');
+          break;
+        case 'navigate':
+          handleNavigate(btn.getAttribute('data-route') || 'dashboard');
+          break;
+        case 'start-full-mock':
+          startOfficialFullMock();
+          break;
+        case 'set-practice-mode':
+          state.practiceInstantMode = btn.getAttribute('data-instant') === 'true';
+          renderApp();
+          break;
+        case 'start-part':
+          startPartPractice(Number(btn.getAttribute('data-part')));
+          break;
+        case 'select-option':
+          selectAnswerOption(Number(btn.getAttribute('data-option')));
+          break;
+        case 'toggle-flag':
+          toggleFlagCurrent();
+          break;
+        case 'prev-question':
+          if (state.session) jumpToQuestionIndex(state.session.currentIndex - 1);
+          break;
+        case 'next-question':
+          if (state.session) jumpToQuestionIndex(state.session.currentIndex + 1);
+          break;
+        case 'jump-index':
+          jumpToQuestionIndex(Number(btn.getAttribute('data-index')));
+          break;
+        case 'jump-blank': {
+          if (!state.session) break;
+          const blankNum = Number(btn.getAttribute('data-blank'));
+          const targetIdx = state.session.questions.findIndex(q => Number(q.blankNumber) === blankNum);
+          if (targetIdx !== -1) jumpToQuestionIndex(targetIdx);
+          break;
+        }
+        case 'jump-part': {
+          if (!state.session) break;
+          const p = Number(btn.getAttribute('data-part'));
+          const targetIdx = state.session.questions.findIndex(q => q.part === p);
+          if (targetIdx !== -1) jumpToQuestionIndex(targetIdx);
+          break;
+        }
+        case 'set-font':
+          state.passageFontSize = btn.getAttribute('data-size') || 'base';
+          SafeStorage.setItem(STORAGE_KEYS.FONT_SIZE, state.passageFontSize);
+          renderApp();
+          break;
+        case 'toggle-pause':
+          if (state.session) {
+            state.session.paused = !state.session.paused;
+            renderApp();
+          }
+          break;
+        case 'toggle-drawer':
+          state.drawerOpen = !state.drawerOpen;
+          renderApp();
+          break;
+        case 'submit-test':
+          requestSubmitTest();
+          break;
+        case 'save-question-vocab': {
+          if (!state.session) break;
+          const q = state.session.questions[state.session.currentIndex];
+          const vIdx = Number(btn.getAttribute('data-vidx'));
+          if (q && q.vocab && q.vocab[vIdx]) {
+            addWordToDeck(q.vocab[vIdx]);
+          }
+          break;
+        }
+        case 'save-report-vocab': {
+          if (!state.lastReport) break;
+          const qId = btn.getAttribute('data-qid');
+          const vIdx = Number(btn.getAttribute('data-vidx'));
+          const q = state.lastReport.questions.find(item => String(item.id) === String(qId));
+          if (q && q.vocab && q.vocab[vIdx]) {
+            addWordToDeck(q.vocab[vIdx]);
+          }
+          break;
+        }
+        case 'set-report-filter':
+          state.reportFilter = btn.getAttribute('data-filter') || 'all';
+          renderApp();
+          break;
+        case 'run-ai-generate':
+          generateAIQuestions();
+          break;
+        case 'start-ai-test': {
+          if (!state.aiGeneratedSet) break;
+          const instant = btn.getAttribute('data-instant') === 'true';
+          startTestSession({
+            title: `AI 題組：${state.aiGeneratedSet.theme}`,
+            questions: state.aiGeneratedSet.questions,
+            passages: state.aiGeneratedSet.passage ? [state.aiGeneratedSet.passage] : [],
+            durationMinutes: state.aiGeneratedSet.part === 3 ? 10 : 8,
+            instantFeedback: instant,
+            isOfficialFull: false
+          });
+          break;
+        }
+        case 'set-vocab-filter':
+          state.vocabFilter = btn.getAttribute('data-filter') || 'all';
+          state.flashcardIndex = 0;
+          state.flashcardFlipped = false;
+          renderApp();
+          break;
+        case 'flip-card':
+          if (e.target.closest('[data-action="speak-card"]')) break;
+          state.flashcardFlipped = !state.flashcardFlipped;
+          renderApp();
+          break;
+        case 'speak-card':
+          e.stopPropagation();
+          speakWord(btn.getAttribute('data-word'));
+          break;
+        case 'prev-card':
+          if (state.flashcardIndex > 0) {
+            state.flashcardIndex -= 1;
+            state.flashcardFlipped = false;
+            renderApp();
+          }
+          break;
+        case 'next-card':
+          state.flashcardIndex += 1;
+          state.flashcardFlipped = false;
+          renderApp();
+          break;
+        case 'toggle-mastered': {
+          const w = btn.getAttribute('data-word');
+          const card = state.vocabDeck.find(v => v.word === w);
+          if (card) {
+            card.mastered = !card.mastered;
+            saveVocabDeck();
+            renderApp();
+          }
+          break;
+        }
+        case 'delete-card': {
+          const w = btn.getAttribute('data-word');
+          state.vocabDeck = state.vocabDeck.filter(v => v.word !== w);
+          saveVocabDeck();
+          renderApp();
+          showToast(`已移除單字「${w}」`, 'info');
+          break;
+        }
+        case 'start-mistake-drill':
+          startMistakeDrill();
+          break;
+        case 'remove-mistake': {
+          const qid = btn.getAttribute('data-qid');
+          state.mistakes = state.mistakes.filter(m => String(m.id) !== String(qid));
+          saveMistakes();
+          renderApp();
+          showToast('已從錯題本移出', 'success');
+          break;
+        }
+        case 'clear-mistakes':
+          openModal({
+            title: '清空所有錯題紀錄？',
+            bodyHtml: '<p>確定要清空錯題本中的全部題目嗎？此操作無法復原。</p>',
+            confirmLabel: '確定清空',
+            cancelLabel: '取消',
+            confirmVariant: 'danger',
+            onConfirm: () => {
+              closeModal();
+              state.mistakes = [];
+              saveMistakes();
+              renderApp();
+              showToast('已清空錯題本', 'info');
+            }
+          });
+          break;
+      }
+    });
+
+    document.addEventListener('change', (e) => {
+      if (e.target && e.target.id === 'ai-part-select') {
+        state.aiConfig.part = Number(e.target.value);
+      } else if (e.target && e.target.id === 'ai-theme-select') {
+        state.aiConfig.theme = e.target.value;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+      if (e.key === 'Escape') {
+        closeModal();
+        return;
+      }
+
+      if (state.route === 'test' && state.session && !state.session.paused) {
+        const key = e.key.toUpperCase();
+        if (key === '1' || key === 'A') selectAnswerOption(0);
+        else if (key === '2' || key === 'B') selectAnswerOption(1);
+        else if (key === '3' || key === 'C') selectAnswerOption(2);
+        else if (key === '4' || key === 'D') selectAnswerOption(3);
+        else if (e.key === 'ArrowLeft') jumpToQuestionIndex(state.session.currentIndex - 1);
+        else if (e.key === 'ArrowRight') jumpToQuestionIndex(state.session.currentIndex + 1);
+        else if (key === 'F') toggleFlagCurrent();
+      }
+    });
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPersistedData();
+      renderApp();
+    });
+  </script>
+</body>
+</html>
